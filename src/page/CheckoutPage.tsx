@@ -6,8 +6,11 @@ import Grid from '../components/Grid';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import shoe1 from '../assets/Image/shoe1.jpg';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const CheckoutPage = () => {
+  const cart = useSelector((state: RootState) => state.cart);
   //   React.useEffect(() => {
   //     async () => {
   //       try {
@@ -85,18 +88,18 @@ const CheckoutPage = () => {
 
               <div className='bg-white  rounded-xl p-4 mt-4'>
                 <h1 className='text-2xl font-semibold mb-4'>Order Details</h1>
-                {Array.from({ length: 2 }).map((_, i) => (
+                {cart.map((item, i) => (
                   <Grid columnsAmount={2} key={i} className='mb-8 md:grid-cols-3'>
                     <Grid.items>
                       <div className='w-full min-h-[200px]'>
-                        <img src={shoe1} alt='img1' style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                        <img src={item.thumbnail} alt='img1' style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                       </div>
                     </Grid.items>
                     <Grid.items className='md:col-span-2'>
-                      <p className='text-lg font-semibold line-clamp-2'>ADIDAS 4DFWD X PARLEY RUNNING SHOES</p>
+                      <p className='text-lg font-semibold line-clamp-2'>{item.title}</p>
                       <p className='text-gray'>Men's Runners Shoe</p>
-                      <p className='text-gray'>Enamel Blue</p>
-                      <p className='text-[#4A69E2] font-semibold'>$130.00</p>
+                      <p className='text-gray'>{item.color}</p>
+                      <p className='text-[#4A69E2] font-semibold'>${item.price}</p>
                     </Grid.items>
                   </Grid>
                 ))}

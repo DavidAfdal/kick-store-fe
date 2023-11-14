@@ -1,28 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Container from '../components/Container';
 import Grid from '../components/Grid';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import CheckBox from '../components/CheckBox';
+import { AuthContext, AuthContextType } from '../context/auth-context';
 
 const LoginPage = () => {
+  const { login } = React.useContext(AuthContext) as AuthContextType;
+  const navigate = useNavigate();
+  const [loginState, setLoginState] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    login(1);
+    navigate('/');
+  };
+
   return (
     <main>
       <Container className='mt-6'>
         <Grid columnsAmount={1} className='lg:grid-cols-3'>
-          <Grid.items className='flex flex-col gap-4'>
-            <h1 className='text-3xl font-semibold'>Login</h1>
-            <Input type='text' placeholder='Email' />
-            <Input type='password' placeholder='Password' />
-            <Link to='/' className='underline'>
-              Forget Your Password
-            </Link>
-            <CheckBox label='Keep me logged in - applies to all log in options below. More info' className='w-4 h-4' />
-            <Button className='bg-[#232321] justify-between flex '>
-              Login <span className='w-4 h-4'>&#129058;</span>
-            </Button>
-            <p className='font-normal'>By clicking 'Log In' you agree to our website KicksClub Terms & Conditions, Kicks Privacy Notice and Terms & Conditions.</p>
+          <Grid.items>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+              <h1 className='text-3xl font-semibold'>Login</h1>
+              <Input type='text' placeholder='Email' onChange={(e) => setLoginState({ ...loginState, email: e.target.value })} />
+              <Input type='password' placeholder='Password' />
+              <Link to='/' className='underline'>
+                Forget Your Password
+              </Link>
+              <CheckBox label='Keep me logged in - applies to all log in options below. More info' className='w-4 h-4' />
+              <Button className='bg-[#232321] justify-between flex ' type='submit'>
+                Login <span className='w-4 h-4'>&#129058;</span>
+              </Button>
+              <p className='font-normal'>By clicking 'Log In' you agree to our website KicksClub Terms & Conditions, Kicks Privacy Notice and Terms & Conditions.</p>
+            </form>
           </Grid.items>
           <Grid.items className='lg:col-span-2'>
             <div className='bg-white p-6 rounded-lg flex flex-col gap-4 lg:ml-auto lg:w-[90%] '>

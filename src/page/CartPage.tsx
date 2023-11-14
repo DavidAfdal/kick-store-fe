@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { CartItemModel } from '../models/cartModels';
 import ShoesData from '../data/ShoesData';
@@ -8,9 +8,25 @@ import Container from '../components/Container';
 import Grid from '../components/Grid';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import { RiDeleteBin2Line } from 'react-icons/ri';
+import Modal from '../components/Modal';
+import { AiOutlineWarning, AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import { decrementQuantity, incrementQuantity, removeItem } from '../redux/reducer/cartSlice';
+import SwiperItems from '../components/SwiperItems';
 
 const CartPage = () => {
   const cart = useSelector((state: RootState) => state.cart);
+  const dispatch = useDispatch();
+  const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = React.useState<number>(0);
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+
+    // These options are needed to round to whole numbers if that's what you want.
+    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+  });
   const navigate = useNavigate();
   //   React.useEffect(() => {
   //     async () => {
@@ -21,6 +37,42 @@ const CartPage = () => {
   //       }
   //     };
   //   }, []);
+
+  const getTotalQuantity = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity;
+    });
+    return total;
+  };
+
+  const getTotalPriceItem = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity * parseInt(item.price);
+    });
+
+    return formatter.format(total);
+  };
+
+  const getTotalPrice = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity * parseInt(item.price);
+    });
+
+    return formatter.format(total + 6.99);
+  };
+
+  const handleConfirmClicksDelete = (id: number) => {
+    setSelectedItem(id);
+    setDeleteModal(true);
+  };
+
+  const handleClickDelete = () => {
+    dispatch(removeItem(selectedItem));
+    setDeleteModal(false);
+  };
 
   const handleClickCheackOut = () => {
     // try {
@@ -52,12 +104,30 @@ const CartPage = () => {
                     <div className='flex flex-col gap-4'>
                       <div className='md:flex md:justify-between'>
                         <p className='md:text-2xl font-semibold lg:w-[80%]'>{item.title}</p>
-                        <p className='hidden md:block text-[#4A69E2] font-semibold'>{item.price}</p>
+                        <p className='hidden md:block text-[#4A69E2] font-semibold'>{formatter.format(parseInt(item.price))}</p>
                       </div>
                       <p className='text-gray'>Men's Runners Shoe</p>
-                      <p className='text-gray'>{item.quantity}</p>
                       <p>{item.color}</p>
-                      <p className='md:hidden block text-[#4A69E2] font-semibold'>{item.price}</p>
+                      <div className='flex md:items-center gap-4 flex-col md:flex-row'>
+                        <p>Size : {item.size}</p>
+                        <div className='flex md:items-center gap-4 flex-col md:flex-row'>
+                          <p>Quantity :</p>
+                          <div className='flex gap-4'>
+                            <div className='rounded-full bg-[#232321] p-1'>
+                              <AiOutlineMinus className='md:text-lg text-white' onClick={() => dispatch(decrementQuantity(item.id))} />
+                            </div>
+
+                            <p className='text-gray text-lg'>{item.quantity}</p>
+                            <div className='rounded-full bg-[#232321] p-1'>
+                              <AiOutlinePlus className='md:text-lg text-white' onClick={() => dispatch(incrementQuantity(item.id))} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className='md:hidden block text-[#4A69E2] font-semibold'>${item.price}</p>
+                      <div className='flex'>
+                        <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors' onClick={() => handleConfirmClicksDelete(item.id)} />
+                      </div>
                     </div>
                   </Grid.items>
                 </Grid>
@@ -69,8 +139,8 @@ const CartPage = () => {
               <h1 className='text-2xl font-semibold'>Order Summary</h1>
               <div className='flex w-full flex-col gap-2 mt-2'>
                 <div className='flex justify-between'>
-                  <p>2 Item</p>
-                  <p>$230.00</p>
+                  <p>{`${getTotalQuantity()} item`}</p>
+                  <p>{`${getTotalPriceItem()}`}</p>
                 </div>
                 <div className='flex justify-between'>
                   <p>Delivery</p>
@@ -82,7 +152,7 @@ const CartPage = () => {
                 </div>
                 <div className='flex justify-between'>
                   <p className='font-semibold'>Total</p>
-                  <p className='font-semibold'>$236.99</p>
+                  <p className='font-semibold'>{getTotalPrice()}</p>
                 </div>
               </div>
               <Button className='bg-[#232321] mt-4 w-full' onClick={handleClickCheackOut}>
@@ -93,10 +163,14 @@ const CartPage = () => {
         </Grid>
       </Container>
       <Container>
-        <div className='mb-6'>
+        <div className='mb-6 flex justify-between'>
           <h1 className='text-3xl font-semibold'>You May Also Like</h1>
+          <div className='flex gap-2'>
+            <button className='swiper-button-prev text-lg px-4 bg-[#232321] text-white rounded-md disabled:bg-[#70706E]'> &lt;</button>
+            <button className='swiper-button-next text-lg px-4 bg-[#232321] text-white rounded-md disabled:bg-[#70706E]'>&gt;</button>
+          </div>
         </div>
-        <Grid columnsAmount={2} className='md:grid-cols-4'>
+        {/* <Grid columnsAmount={2} className='md:grid-cols-4'>
           {ShoesData.slice(0, 4).map((data) => (
             <Grid.items key={data.id}>
               <Card>
@@ -109,8 +183,26 @@ const CartPage = () => {
               </Card>
             </Grid.items>
           ))}
-        </Grid>
+        </Grid> */}
+
+        <SwiperItems data={ShoesData} />
       </Container>
+
+      <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
+        <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col items-center gap-6'>
+          <AiOutlineWarning className='text-[60px] text-red-600' />
+          <h1 className='text-2xl font-semibold'>Are You sure?</h1>
+          <p className='text-center'>Do you want to delete this item? this process cannot be undone</p>
+          <div className='flex gap-4'>
+            <Button className='bg-slate-400' onClick={() => setDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button className='bg-red-600' onClick={() => handleClickDelete()}>
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </main>
   );
 };

@@ -26,7 +26,7 @@ const ShoesData: ShoeModel[] = [
     id: 1,
     nama: 'ADIDAS 4DFWD X PARLEY RUNNING SHOES',
     thumbnail: shoe1,
-    harga: '125.00',
+    harga: '100.00',
     tag: 'new',
     gambar: [shoe1, detail1, detail2, detail3],
     color: [
@@ -62,7 +62,7 @@ const ShoesData: ShoeModel[] = [
     id: 3,
     nama: 'ADIDAS 4DFWD PULSE 2.0',
     thumbnail: shoe3,
-    harga: '125.00',
+    harga: '145.00',
     gambar: [shoe3, wd1, wd2, wd3],
     color: [
       {
@@ -79,7 +79,7 @@ const ShoesData: ShoeModel[] = [
     id: 4,
     nama: 'ADIDAS ULTRABOOST 1.0 DNA DARK GREEN UNISEX ORIGINAL',
     thumbnail: shoe4,
-    harga: '125.00',
+    harga: '175.00',
     Discount: 20,
     gambar: [shoe4, boost1, boost2, boost3],
     color: [

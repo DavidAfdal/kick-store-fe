@@ -1,6 +1,8 @@
 import Container from './Container';
 import Button from './Button';
 import BannerImg from '../assets/Image/Banner.jpg';
+import img1 from '../assets/Image/Rectangle 1.png';
+import img2 from '../assets/Image/Rectangle 2.png';
 
 const Banner = ({ onClick }: { onClick: () => void }) => {
   return (
@@ -18,9 +20,9 @@ const Banner = ({ onClick }: { onClick: () => void }) => {
             <p className='lg:text-2xl text-white mb-2'>Nike introducing the new air max for everyone's comfort</p>
             <Button onClick={onClick}>Shop Now</Button>
           </div>
-          <div>
-            <img src='/' alt='' className='w-[64px] h-[64px] border-2 border-white md:w-[150px] md:h-[150px] rounded-lg mb-4' />
-            <img src='/' alt='' className='w-[64px]  h-[64px] border-2 border-white md:w-[150px] md:h-[150px] rounded-lg' />
+          <div className='hidden md:block'>
+            <img src={img1} alt='' className='w-[64px] h-[64px] border-2 border-white lg:w-[150px] lg:h-[150px] rounded-lg mb-4 object-cover object-center aspect-square' />
+            <img src={img2} alt='' className='w-[64px]  h-[64px] border-2 border-white lg:w-[150px] lg:h-[150px] rounded-lg object-cover object-center aspect-square' />
           </div>
         </div>
       </div>

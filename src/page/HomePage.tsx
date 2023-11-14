@@ -8,6 +8,13 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import review1 from '../assets/Image/review1.jpg';
 import ReviewCard from '../components/ReviewCard';
+import category1 from '../assets/Image/category1.png';
+import category2 from '../assets/Image/category2.png';
+import category3 from '../assets/Image/category3.png';
+import category4 from '../assets/Image/category4.png';
+import category5 from '../assets/Image/category5.png';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -52,8 +59,92 @@ const HomePage = () => {
 
       <section className='bg-[#232321] w-full h-full mb-[100px]'>
         <div className='left-container'>
-          <h1 className='text-white text-2xl sm:text-3xl md:text-5xl lg:text-7xl my-10'>CATEGORIES</h1>
-          <div className='w-full h-[400px] bg-white rounded-tl-[25px]'></div>
+          <div className='flex justify-between items-center'>
+            <h1 className='text-white text-2xl sm:text-3xl md:text-5xl lg:text-7xl my-10'>CATEGORIES</h1>
+            <div className='flex gap-2 mr-6'>
+              <button className='swiper-button-prev text-lg px-4 bg-white text-[#232321] rounded-md disabled:bg-[#70706E] py-2'> &lt;</button>
+              <button className='swiper-button-next text-lg px-4 bg-white text-[#232321] rounded-md disabled:bg-[#70706E] py-2'>&gt;</button>
+            </div>
+          </div>
+          <div className='w-full min-h-[400px]'>
+            <Swiper
+              modules={[Navigation]}
+              navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }}
+            >
+              <SwiperSlide>
+                <div className='grid grid-cols-1 sm:grid-cols-2'>
+                  <div className='p-4 bg-[#ECEEF0]  rounded-tl-[25px]'>
+                    <div className='flex justify-center'>
+                      <img src={category1} className='max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
+                    </div>
+                    <p className='text-3xl text-bold'>
+                      LIFESTYLE <br />
+                      SHOES
+                    </p>
+                  </div>
+
+                  <div className='p-4 bg-[#ECEEF0]'>
+                    <div className='flex justify-center'>
+                      <img src={category2} className='max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
+                    </div>
+                    <p className='text-3xl text-bold'>
+                      BASKETBALL <br />
+                      SHOES
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className='grid grid-cols-1 sm:grid-cols-2'>
+                  <div className='p-4 bg-[#ECEEF0]  rounded-tl-[25px]'>
+                    <div className='flex justify-center'>
+                      <img src={category3} className='xl:min-h-[500px] max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
+                    </div>
+                    <p className='text-3xl text-bold'>
+                      GOLF <br />
+                      SHOES
+                    </p>
+                  </div>
+
+                  <div className='p-4 bg-[#ECEEF0]'>
+                    <div className='flex justify-center'>
+                      <img src={category4} className=' max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
+                    </div>
+                    <p className='text-3xl text-bold'>
+                      OUTDOOR <br />
+                      SHOES
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className='grid grid-cols-1 sm:grid-cols-2'>
+                  <div className='p-4 bg-[#ECEEF0]  rounded-tl-[25px]'>
+                    <div className='flex justify-center'>
+                      <img src={category5} className=' max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
+                    </div>
+                    <p className='text-3xl text-bold'>
+                      RUNNER <br />
+                      SHOES
+                    </p>
+                  </div>
+
+                  <div className='p-4 bg-[#ECEEF0]'>
+                    <div className='flex justify-center'>
+                      <img src={category2} className=' max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
+                    </div>
+                    <p className='text-3xl text-bold'>
+                      BASKETBALL <br />
+                      SHOES
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+            </Swiper>
+          </div>
         </div>
       </section>
 
