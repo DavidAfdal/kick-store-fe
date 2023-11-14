@@ -6,11 +6,10 @@ import { CartItemModel } from '../models/cartModels';
 import ShoesData from '../data/ShoesData';
 import Container from '../components/Container';
 import Grid from '../components/Grid';
-import Card from '../components/Card';
 import Button from '../components/Button';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import Modal from '../components/Modal';
-import { AiOutlineWarning, AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import { AiOutlineWarning, AiOutlinePlus, AiOutlineMinus, AiFillHeart } from 'react-icons/ai';
 import { decrementQuantity, incrementQuantity, removeItem } from '../redux/reducer/cartSlice';
 import SwiperItems from '../components/SwiperItems';
 
@@ -125,7 +124,8 @@ const CartPage = () => {
                         </div>
                       </div>
                       <p className='md:hidden block text-[#4A69E2] font-semibold'>${item.price}</p>
-                      <div className='flex'>
+                      <div className='flex gap-4'>
+                        <AiFillHeart className='w-[30px] h-[30px] hover:text-red-600 transition-colors' />
                         <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors' onClick={() => handleConfirmClicksDelete(item.id)} />
                       </div>
                     </div>
