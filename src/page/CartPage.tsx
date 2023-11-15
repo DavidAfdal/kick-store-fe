@@ -14,7 +14,7 @@ import { decrementQuantity, incrementQuantity, removeItem } from '../redux/reduc
 import SwiperItems from '../components/SwiperItems';
 
 const CartPage = () => {
-  const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector((state: RootState) => state.cartReducer.cart);
   const dispatch = useDispatch();
   const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
   const [selectedItem, setSelectedItem] = React.useState<number>(0);
@@ -79,6 +79,7 @@ const CartPage = () => {
     // } catch (error) {
     //   console.log(error)
     // }
+
     navigate('/checkout');
   };
 
@@ -155,7 +156,7 @@ const CartPage = () => {
                   <p className='font-semibold'>{getTotalPrice()}</p>
                 </div>
               </div>
-              <Button className='bg-[#232321] mt-4 w-full' onClick={handleClickCheackOut}>
+              <Button className='bg-[#232321] mt-4 w-full disabled:bg-[#70706E]' onClick={handleClickCheackOut} disabled={cart.length === 0 ? true : false}>
                 Checkout
               </Button>
             </div>

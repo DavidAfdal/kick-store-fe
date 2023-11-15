@@ -5,12 +5,11 @@ import Container from '../components/Container';
 import Grid from '../components/Grid';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import shoe1 from '../assets/Image/shoe1.jpg';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
 const CheckoutPage = () => {
-  const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector((state: RootState) => state.cartReducer.cart);
   //   React.useEffect(() => {
   //     async () => {
   //       try {

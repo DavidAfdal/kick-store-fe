@@ -10,7 +10,7 @@ import Dropdown from './Dropdown';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector((state: RootState) => state.cartReducer.cart);
   const totaltemInCart = () => {
     let total = 0;
     cart.forEach((item) => {

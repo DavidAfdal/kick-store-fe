@@ -9,6 +9,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import { ColorModel } from '../models/colorModel';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 import ShoesData from '../data/ShoesData';
 import Container from '../components/Container';
 import Grid from '../components/Grid';
@@ -16,27 +18,30 @@ import Button from '../components/Button';
 import Modal from '../components/Modal';
 import Input from '../components/Input';
 import SwiperItems from '../components/SwiperItems';
+import { addItem, toggleLike } from '../redux/reducer/likeSlice';
 
 const DetailsPage = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const { isLoggedIn } = React.useContext(AuthContext) as AuthContextType;
   const [size, setSize] = React.useState(38);
   const [like, setLike] = React.useState(false);
   const [selectedColor, setSelectedColor] = React.useState<string>('');
   const [authModal, setAuthModal] = React.useState<boolean>(false);
 
+  const detailsData: ShoeModel | undefined = ShoesData.find((data) => data.id.toString() === id);
+
+  const selectIsLikedById = (itemId: number | undefined) => (state: RootState) => {
+    const item = state.likeReducer.like.find((item) => item.id === itemId);
+    return item ? item.like : false;
+  };
+
+  const likeItem = useSelector(selectIsLikedById(detailsData?.id));
+
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-
-    // These options are needed to round to whole numbers if that's what you want.
-    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
   });
-
-  const dispatch = useDispatch();
-
-  const detailsData: ShoeModel | undefined = ShoesData.find((data) => data.id.toString() === id);
 
   const priceAfterDiscount = (diskon: number, price: number) => {
     return price - price * (diskon / 100);
@@ -85,7 +90,24 @@ const DetailsPage = () => {
 
   const handleLike = () => {
     if (isLoggedIn) {
-      setLike(!like);
+      if (likeItem) {
+        dispatch(toggleLike(detailsData?.id));
+      } else {
+        if (detailsData) {
+          dispatch(
+            addItem({
+              id: detailsData.id,
+              nama: detailsData.nama,
+              thumbnail: detailsData.harga,
+              harga: detailsData.harga,
+              tag: detailsData.tag,
+              Discount: detailsData.Discount,
+              color: detailsData.color,
+              like: true,
+            })
+          );
+        }
+      }
     } else {
       setAuthModal(true);
     }
@@ -176,7 +198,7 @@ const DetailsPage = () => {
                   Add To Cart
                 </Button>
                 <Button className='bg-[#232321]' onClick={handleLike}>
-                  <AiFillHeart className={`${like === true ? 'text-red-500' : ''}`} />
+                  <AiFillHeart className={`${likeItem ? 'text-red-500' : ''}`} />
                 </Button>
               </div>
               <Button className='w-full' onClick={() => setAuthModal(true)}>
