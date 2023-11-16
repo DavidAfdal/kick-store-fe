@@ -14,7 +14,7 @@ const RegisterPage = () => {
             <h1 className='text-3xl font-semibold'>Register</h1>
             <h1 className='text-3xl font-semibold'>Your Name</h1>
             <Input type='text' placeholder='First Name*' />
-            <Input type='password' placeholder='Last Name*' />
+            <Input type='text' placeholder='Last Name*' />
             <h1 className='text-3xl font-semibold'>Gender</h1>
             <div className='flex gap-4'>
               <CheckBox label='Male' className='w-4 h-4' />
@@ -22,7 +22,7 @@ const RegisterPage = () => {
             </div>
             <h1 className='text-3xl font-semibold'>Login Details</h1>
             <Input type='text' placeholder='Email' />
-            <Input type='password' placeholder='Password' />
+            <Input type='text' placeholder='Password' />
 
             <CheckBox label={`By clicking 'Log In' you agree to our website KicksClub Terms & Conditions, Kicks Privacy Notice and Terms & Conditions.`} className='w-4 h-4' />
             <CheckBox label='Keep me logged in - applies to all log in options below. More info' className='w-4 h-4' />
