@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Button from './Button';
 
-const Card = ({ children }: { children: React.ReactElement[] | React.ReactElement }) => {
-  return <div>{children}</div>;
+type CardProps = {
+  children: ReactNode;
+  className?: string;
+} & React.ComponentProps<'div'>;
+
+const Card = ({ children, className, ...restProps }: CardProps) => {
+  return (
+    <div className={className} {...restProps}>
+      {children}
+    </div>
+  );
 };
 
 const CardImg = ({ src, alt, tags, diskon }: { src: string; alt: string; tags?: string; diskon?: number }) => {

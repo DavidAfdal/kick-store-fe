@@ -15,8 +15,10 @@ import category4 from '../assets/Image/category4.png';
 import category5 from '../assets/Image/category5.png';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import Modal from '../components/Modal';
 
 const HomePage = () => {
+  const [modalI, setModalI] = React.useState<boolean>(false);
   const navigate = useNavigate();
   //   React.useEffect(() => {
   //     async () => {
@@ -31,7 +33,10 @@ const HomePage = () => {
     navigate(path);
   };
   return (
-    <main>
+    <main className='relative'>
+      <Button className='fixed bottom-5 right-4 z-50' onClick={() => setModalI(true)}>
+        i
+      </Button>
       <Banner onClick={() => navigate('/shop')} />
       <Container>
         <div className='flex justify-between items-center mb-4'>
@@ -167,6 +172,20 @@ const HomePage = () => {
           ))}
         </Grid>
       </Container>
+
+      <Modal open={modalI} onClose={() => setModalI(false)}>
+        <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col gap-4'>
+          <h1 className='text-2xl text-center uppercase text-blue-800 font-semibold'>Informasi</h1>
+          <p className='text-center uppercase'>Aplikasi Ini Dibuat oleh :</p>
+          <ul className='text-center flex flex-col gap-4'>
+            <li>DAVID AFDAL KAIZAR MUTAHADI 10121319</li>
+            <li>I KADEK ANDIKA DWI PUTRA 10121569</li>
+            <li>FACHRI TAUFIQURRAHMAN 10121393</li>
+            <li>SHEEHAN RAFEE' EFFENDI 11121211</li>
+          </ul>
+          <p className='text-center uppercase leading-8'>Dari Kelas 3KAO5 untuk melengkapi tugas mata kuliah Interaksi Manusia dan Komputer yang dibimbing oleh Ibu Dr. Feni Agustina, SKOM., MMSI.</p>
+        </div>
+      </Modal>
     </main>
   );
 };

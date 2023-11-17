@@ -6,7 +6,7 @@ import img2 from '../assets/Image/Rectangle 2.png';
 
 const Banner = ({ onClick }: { onClick: () => void }) => {
   return (
-    <Container>
+    <Container className='z-[-1]'>
       <h1 className='text-5xl md:text-[200px] lg:text-[220px] font-bold'>
         DO IT <span className='text-[#4A69E2]'>RIGHT</span>
       </h1>

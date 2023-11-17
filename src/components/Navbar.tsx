@@ -24,13 +24,19 @@ const Navbar = () => {
       <nav className='hidden md:block'>
         <ul className='list-none flex items-center gap-x-8'>
           <li className='font-semibold'>
-            <Link to='/'>Home</Link>
+            <Link to='/' className='hover:text-[#4A69E2] transition-colors'>
+              Home
+            </Link>
           </li>
           <li className='font-semibold'>
-            <Link to='/shop'>Shop</Link>
+            <Link to='/shop' className='hover:text-[#4A69E2] transition-colors'>
+              Shop
+            </Link>
           </li>
           <li className='font-semibold'>
-            <Link to='/shop'>New Drops</Link>
+            <Link to='/shop' className='hover:text-[#4A69E2] transition-colors'>
+              New Drops
+            </Link>
           </li>
         </ul>
       </nav>
@@ -43,8 +49,9 @@ const Navbar = () => {
           </div>
 
           <Dropdown>
-            <p className='cursor-pointer text-base text-gray-700 px-4 py-2 hover:bg-gray-100'>Profile</p>
-            <p className='cursor-pointer text-base text-gray-700 px-4 py-2 hover:bg-gray-100'>Like</p>
+            <p className='cursor-pointer text-base text-gray-700 px-4 py-2 hover:bg-gray-100' onClick={() => navigate('/profile')}>
+              Profile
+            </p>
             <p
               onClick={() => {
                 logout();

@@ -6,15 +6,18 @@ import { store, persistor } from './redux/store.ts';
 import { PersistGate } from 'redux-persist/integration/react';
 import ScrollToTop from './components/ScroolTop.tsx';
 import HomePage from './page/HomePage';
-import Navbar from './components/Navbar';
 import ShopPage from './page/ShopPage';
 import DetailsPage from './page/DetailsPage';
 import CheckoutPage from './page/CheckoutPage';
 import CartPage from './page/CartPage';
-import Footer from './components/Footer';
 import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage';
 import { AuthContext } from './context/auth-context.tsx';
+import Layout from './components/Layout.tsx';
+import Dashboard from './components/Dashboard.tsx';
+import ProfilePage from './page/ProfilePage.tsx';
+import FavoritPage from './page/FavoritPage.tsx';
+import HistoryPage from './page/HistoryPage.tsx';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
@@ -48,17 +51,22 @@ function App() {
           <ScrollToTop>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
-                <Navbar />
                 <Routes>
-                  <Route path='/' element={<HomePage />} />
-                  <Route path='/shop' element={<ShopPage />} />
-                  <Route path='/details/:id' element={<DetailsPage />} />
-                  <Route path='/checkout' element={<CheckoutPage />} />
-                  <Route path='/cart' element={<CartPage />} />
-                  <Route path='/login' element={<LoginPage />} />
-                  <Route path='/register' element={<RegisterPage />} />
+                  <Route path='/' element={<Layout />}>
+                    <Route path='/' element={<HomePage />} />
+                    <Route path='/shop' element={<ShopPage />} />
+                    <Route path='/details/:id' element={<DetailsPage />} />
+                    <Route path='/checkout' element={<CheckoutPage />} />
+                    <Route path='/cart' element={<CartPage />} />
+                    <Route path='/login' element={<LoginPage />} />
+                    <Route path='/register' element={<RegisterPage />} />
+                  </Route>
+                  <Route path='/' element={<Dashboard />}>
+                    <Route path='/profile' element={<ProfilePage />} />
+                    <Route path='/favorit' element={<FavoritPage />} />
+                    <Route path='/history' element={<HistoryPage />} />
+                  </Route>
                 </Routes>
-                <Footer />
               </PersistGate>
             </Provider>
           </ScrollToTop>

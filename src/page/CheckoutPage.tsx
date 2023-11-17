@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import CheckBox from '../components/CheckBox';
 import Container from '../components/Container';
 import Grid from '../components/Grid';
@@ -20,6 +20,40 @@ const CheckoutPage = () => {
   //     };
   //   }, []);
 
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+
+    // These options are needed to round to whole numbers if that's what you want.
+    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+  });
+
+  const getTotalQuantity = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity;
+    });
+    return total;
+  };
+
+  const getTotalPriceItem = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity * parseInt(item.price);
+    });
+
+    return formatter.format(total);
+  };
+
+  const getTotalPrice = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity * parseInt(item.price);
+    });
+
+    return formatter.format(total + 6.99);
+  };
   return (
     <main>
       <Container className='mt-4'>
@@ -51,7 +85,6 @@ const CheckoutPage = () => {
             </div>
 
             <div className='flex flex-col gap-4 mt-4'>
-              <h1 className='text-3xl font-semibold'>Delivery Option</h1>
               <CheckBox label='My billing and delivery information are the same ' />
               <CheckBox label={`I’m 13+ year old`} />
               <div className='flex flex-col gap-2'>
@@ -67,8 +100,8 @@ const CheckoutPage = () => {
                 <h1 className='text-2xl font-semibold'>Order Summary</h1>
                 <div className='flex w-full flex-col gap-2 mt-2'>
                   <div className='flex justify-between'>
-                    <p>2 Item</p>
-                    <p>$230.00</p>
+                    <p>{getTotalQuantity()}</p>
+                    <p>{getTotalPriceItem()}</p>
                   </div>
                   <div className='flex justify-between'>
                     <p>Delivery</p>
@@ -80,7 +113,7 @@ const CheckoutPage = () => {
                   </div>
                   <div className='flex justify-between'>
                     <p className='font-semibold'>Total</p>
-                    <p className='font-semibold'>$236.99</p>
+                    <p className='font-semibold'>{getTotalPrice()}</p>
                   </div>
                 </div>
               </div>

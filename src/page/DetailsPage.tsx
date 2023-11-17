@@ -4,7 +4,7 @@ import { AiFillHeart } from 'react-icons/ai';
 import { ShoeModel } from '../models/shoesModel';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/reducer/cartSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/auth-context';
@@ -18,14 +18,14 @@ import Button from '../components/Button';
 import Modal from '../components/Modal';
 import Input from '../components/Input';
 import SwiperItems from '../components/SwiperItems';
-import { addItem, toggleLike } from '../redux/reducer/likeSlice';
+import { addItem, removeItem, toggleLike } from '../redux/reducer/likeSlice';
 
 const DetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoggedIn } = React.useContext(AuthContext) as AuthContextType;
   const [size, setSize] = React.useState(38);
-  const [like, setLike] = React.useState(false);
   const [selectedColor, setSelectedColor] = React.useState<string>('');
   const [authModal, setAuthModal] = React.useState<boolean>(false);
 
@@ -51,7 +51,7 @@ const DetailsPage = () => {
     setSelectedColor(event.target.value);
   };
 
-  const handleClickAddToCart = (e: React.MouseEvent<HTMLElement>) => {
+  const handleClickAddToCart = () => {
     // try {
     //   axios.post('', {});
     // } catch (error) {
@@ -92,13 +92,15 @@ const DetailsPage = () => {
     if (isLoggedIn) {
       if (likeItem) {
         dispatch(toggleLike(detailsData?.id));
+        dispatch(removeItem(detailsData?.id));
       } else {
         if (detailsData) {
+          dispatch(toggleLike(detailsData?.id));
           dispatch(
             addItem({
               id: detailsData.id,
               nama: detailsData.nama,
-              thumbnail: detailsData.harga,
+              thumbnail: detailsData.thumbnail,
               harga: detailsData.harga,
               tag: detailsData.tag,
               Discount: detailsData.Discount,
@@ -107,6 +109,38 @@ const DetailsPage = () => {
             })
           );
         }
+        toast.info('Success add favorit item', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+    } else {
+      setAuthModal(true);
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (isLoggedIn) {
+      if (detailsData) {
+        const data = {
+          id: detailsData.id,
+          title: detailsData.nama,
+          quantity: 0,
+          size: size,
+          thumbnail: detailsData.gambar[0],
+          color: selectedColor === '' ? detailsData.color[0].nama : selectedColor,
+          price: detailsData.Discount ? priceAfterDiscount(detailsData.Discount, parseInt(detailsData.harga)).toString() : detailsData.harga,
+        };
+
+        dispatch(addToCart(data));
+
+        navigate('/cart');
       }
     } else {
       setAuthModal(true);
@@ -198,10 +232,10 @@ const DetailsPage = () => {
                   Add To Cart
                 </Button>
                 <Button className='bg-[#232321]' onClick={handleLike}>
-                  <AiFillHeart className={`${likeItem ? 'text-red-500' : ''}`} />
+                  <AiFillHeart className={`${likeItem ? 'text-red-500' : ''} hover:text-red-500 transition-colors`} />
                 </Button>
               </div>
-              <Button className='w-full' onClick={() => setAuthModal(true)}>
+              <Button className='w-full' onClick={() => handleBuyNow()}>
                 Buy It Now
               </Button>
 

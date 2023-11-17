@@ -11,7 +11,10 @@ const likeSlice = createSlice({
   initialState: { like: [] } as LikeState,
   reducers: {
     addItem: (state, action: PayloadAction<LikesModel>) => {
-      state.like.push({ ...action.payload, like: true });
+      const item = state.like.find((item) => item.id === action.payload.id);
+      if (item === undefined) {
+        state.like.push({ ...action.payload, like: true });
+      }
     },
     toggleLike: (state, action: PayloadAction<number | undefined>) => {
       const itemId = action.payload;

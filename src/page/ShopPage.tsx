@@ -10,6 +10,7 @@ import Button from '../components/Button';
 import SearchInput from '../components/SearchInput';
 import CheckBox from '../components/CheckBox';
 import BannerImg2 from '../assets/Image/Baner3.png';
+import Input from '../components/Input';
 
 const ShopPage = () => {
   const [page, setPage] = React.useState<number | null>(null);
@@ -77,7 +78,10 @@ const ShopPage = () => {
                 <CheckBox label='Female' />
               </Accordion>
               <Accordion title='Price'>
-                <input type='range' className='w-full' min='0' max='1000' step={100} />
+                <div className='flex gap-4'>
+                  <Input type='text' placeholder='$ Min' />
+                  <Input type='text' placeholder='$ Max' />
+                </div>
               </Accordion>
               <Button className='w-full bg-[#232321]'>Apply</Button>
             </div>

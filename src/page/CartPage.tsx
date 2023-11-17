@@ -17,7 +17,7 @@ const CartPage = () => {
   const cart = useSelector((state: RootState) => state.cartReducer.cart);
   const dispatch = useDispatch();
   const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = React.useState<number>(0);
+  const [selectedItem, setSelectedItem] = React.useState({ id: 0, color: '', size: 0 });
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -63,8 +63,8 @@ const CartPage = () => {
     return formatter.format(total + 6.99);
   };
 
-  const handleConfirmClicksDelete = (id: number) => {
-    setSelectedItem(id);
+  const handleConfirmClicksDelete = (id: number, color: string, size: number) => {
+    setSelectedItem({ id: id, color: color, size: size });
     setDeleteModal(true);
   };
 
@@ -114,12 +114,12 @@ const CartPage = () => {
                           <p>Quantity :</p>
                           <div className='flex gap-4'>
                             <div className='rounded-full bg-[#232321] p-1'>
-                              <AiOutlineMinus className='md:text-lg text-white' onClick={() => dispatch(decrementQuantity(item.id))} />
+                              <AiOutlineMinus className='md:text-lg text-white' onClick={() => dispatch(decrementQuantity({ id: item.id, color: item.color, size: item.size }))} />
                             </div>
 
                             <p className='text-gray text-lg'>{item.quantity}</p>
                             <div className='rounded-full bg-[#232321] p-1'>
-                              <AiOutlinePlus className='md:text-lg text-white' onClick={() => dispatch(incrementQuantity(item.id))} />
+                              <AiOutlinePlus className='md:text-lg text-white' onClick={() => dispatch(incrementQuantity({ id: item.id, color: item.color, size: item.size }))} />
                             </div>
                           </div>
                         </div>
@@ -127,7 +127,7 @@ const CartPage = () => {
                       <p className='md:hidden block text-[#4A69E2] font-semibold'>${item.price}</p>
                       <div className='flex gap-4'>
                         <AiFillHeart className='w-[30px] h-[30px] hover:text-red-600 transition-colors' />
-                        <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors' onClick={() => handleConfirmClicksDelete(item.id)} />
+                        <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors' onClick={() => handleConfirmClicksDelete(item.id, item.color, item.size)} />
                       </div>
                     </div>
                   </Grid.items>
@@ -171,20 +171,6 @@ const CartPage = () => {
             <button className='swiper-button-next text-lg px-4 bg-[#232321] text-white rounded-md disabled:bg-[#70706E]'>&gt;</button>
           </div>
         </div>
-        {/* <Grid columnsAmount={2} className='md:grid-cols-4'>
-          {ShoesData.slice(0, 4).map((data) => (
-            <Grid.items key={data.id}>
-              <Card>
-                <Card.Img src={data.thumbnail} alt={data.nama} tags={data.tag} diskon={data.Discount} />
-                <Card.Title>{data.nama}</Card.Title>
-                <Card.Button onClick={() => navigate(`/details/${data.id}`)}>
-                  {' '}
-                  View Product - <span className='text-[#FFA52F]'>&nbsp;${data.harga}</span>
-                </Card.Button>
-              </Card>
-            </Grid.items>
-          ))}
-        </Grid> */}
 
         <SwiperItems data={ShoesData} />
       </Container>
