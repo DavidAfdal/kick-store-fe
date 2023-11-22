@@ -33,11 +33,6 @@ const Navbar = () => {
               Shop
             </Link>
           </li>
-          <li className='font-semibold'>
-            <Link to='/shop' className='hover:text-[#4A69E2] transition-colors'>
-              New Drops
-            </Link>
-          </li>
         </ul>
       </nav>
       <img src={Logo} alt='kicks' onClick={() => navigate('/')} className='cursor-pointer w-[90px] h-[20px]' />

@@ -24,7 +24,7 @@ const DetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoggedIn } = React.useContext(AuthContext) as AuthContextType;
+  const { isLoggedIn, login } = React.useContext(AuthContext) as AuthContextType;
   const [size, setSize] = React.useState(38);
   const [selectedColor, setSelectedColor] = React.useState<string>('');
   const [authModal, setAuthModal] = React.useState<boolean>(false);
@@ -147,6 +147,10 @@ const DetailsPage = () => {
     }
   };
 
+  const handleLogin = () => {
+    login(1);
+  };
+
   //   React.useEffect(() => {
   //     async () => {
   //       try {
@@ -191,6 +195,7 @@ const DetailsPage = () => {
           <Grid.items>
             <div className='flex flex-col gap-4'>
               {detailsData?.Discount ? <div className='bg-[#FFA52F]  p-4 rounded-lg font-semibold text-xl w-[120px]'>{detailsData?.Discount}% off</div> : null}
+              {detailsData?.tag ? <div className='bg-[#4A69E2] p-4 rounded-lg font-normal text-xl w-[170px] text-white'>New Releasse</div> : null}
               <h1 className='text-3xl font-semibold'>{detailsData?.nama}</h1>
               <div className='flex gap-4'>
                 <p className={`text-2xl text-[#4A69E2] font-semibold ${detailsData?.Discount ? 'line-through' : ''}`}>{`$${detailsData?.harga}`}</p>
@@ -288,7 +293,7 @@ const DetailsPage = () => {
               <Input type='password' placeholder='password' className='bg-white mb-2' />
               <Link to='/'>Forgot Password?</Link>
             </div>
-            <Button>Sign In</Button>
+            <Button onClick={() => handleLogin()}>Sign In</Button>
             <p className='text-center'>
               Don't have an account ?{' '}
               <Link to='/register' className='text-[#4A69E2]'>

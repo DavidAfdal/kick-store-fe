@@ -63,6 +63,7 @@ const ShoesData: ShoeModel[] = [
     nama: 'ADIDAS 4DFWD PULSE 2.0',
     thumbnail: shoe3,
     harga: '145.00',
+    tag: 'new',
     gambar: [shoe3, wd1, wd2, wd3],
     color: [
       {

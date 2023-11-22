@@ -16,19 +16,24 @@ import category5 from '../assets/Image/category5.png';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import Modal from '../components/Modal';
+import axios from 'axios';
+import { Revview } from '../data/ReviewData';
 
 const HomePage = () => {
   const [modalI, setModalI] = React.useState<boolean>(false);
   const navigate = useNavigate();
-  //   React.useEffect(() => {
-  //     async () => {
-  //       try {
-  //         const [products, reviews] = await Promise.all([axios.get(''), axios.get('')]);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //   }, []);
+  React.useEffect(() => {
+    const getData = async () => {
+      try {
+        const sepatu = await axios.get('http://localhost:5000/api/job');
+        console.log(sepatu);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getData();
+  }, []);
   const handleClick = (path: string) => {
     navigate(path);
   };
@@ -159,14 +164,14 @@ const HomePage = () => {
           <Button>SEE ALL</Button>
         </div>
         <Grid columnsAmount={1} className='lg:grid-cols-3 [&>*:nth-child(3)]:hidden [&>*:nth-child(2)]:hidden lg:[&>*:nth-child(2)]:block lg:[&>*:nth-child(3)]:block'>
-          {Array.from({ length: 3 }).map((_, i) => (
+          {Revview.map((data, i) => (
             <Grid.items key={i}>
               <ReviewCard>
-                <ReviewCard.Content rating={4} img={review1}>
-                  <h1 className='font-semibold lg:text-2xl'>Good Quality</h1>
-                  <p className='max-w-[90%]'>I highly recommend shopping from kicks</p>
+                <ReviewCard.Content rating={data.rating} img={data.profileImg}>
+                  <h1 className='font-semibold lg:text-2xl'>{data.nama}</h1>
+                  <p className='max-w-[90%]'>{data.review}</p>
                 </ReviewCard.Content>
-                <ReviewCard.Image img={review1} />
+                <ReviewCard.Image img={data.productImhg} />
               </ReviewCard>
             </Grid.items>
           ))}
@@ -182,6 +187,7 @@ const HomePage = () => {
             <li>I KADEK ANDIKA DWI PUTRA 10121569</li>
             <li>FACHRI TAUFIQURRAHMAN 10121393</li>
             <li>SHEEHAN RAFEE' EFFENDI 11121211</li>
+            <li>BRIGHT DAVID ANDREAS 10121272</li>
           </ul>
           <p className='text-center uppercase leading-8'>Dari Kelas 3KAO5 untuk melengkapi tugas mata kuliah Interaksi Manusia dan Komputer yang dibimbing oleh Ibu Dr. Feni Agustina, SKOM., MMSI.</p>
         </div>

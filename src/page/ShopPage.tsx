@@ -54,7 +54,6 @@ const ShopPage = () => {
             <select onClick={() => console.log(page)} className='bg-white min-w-[120px] lg:min-w-[200px] focus:outline-0  border-none'>
               <option>Trending</option>
               <option>Latelest</option>
-              <option>Chawnima</option>
             </select>
           </div>
         </div>

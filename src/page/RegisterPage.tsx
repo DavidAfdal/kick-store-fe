@@ -4,6 +4,7 @@ import Grid from '../components/Grid';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import CheckBox from '../components/CheckBox';
+import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
   return (
@@ -29,7 +30,12 @@ const RegisterPage = () => {
             <Button className='bg-[#232321] justify-between flex '>
               Register<span className='w-4 h-4'>&#129058;</span>
             </Button>
-            <p className='font-normal'></p>
+            <p className='font-normal text-center'>
+              Already have an account?{' '}
+              <Link to='/login' className='underline text-blue-600'>
+                Login here
+              </Link>
+            </p>
           </Grid.items>
           <Grid.items className='lg:col-span-2'>
             <div className='bg-white p-6 rounded-lg flex flex-col gap-4 lg:ml-auto lg:w-[90%]'>

@@ -100,7 +100,7 @@ const CheckoutPage = () => {
                 <h1 className='text-2xl font-semibold'>Order Summary</h1>
                 <div className='flex w-full flex-col gap-2 mt-2'>
                   <div className='flex justify-between'>
-                    <p>{getTotalQuantity()}</p>
+                    <p>{getTotalQuantity()} items</p>
                     <p>{getTotalPriceItem()}</p>
                   </div>
                   <div className='flex justify-between'>
@@ -131,6 +131,10 @@ const CheckoutPage = () => {
                       <p className='text-lg font-semibold line-clamp-2'>{item.title}</p>
                       <p className='text-gray'>Men's Runners Shoe</p>
                       <p className='text-gray'>{item.color}</p>
+                      <div className='flex flex-col lg:flex-row gap-4'>
+                        <p className='text-gray'>Size {item.size}</p>
+                        <p className='text-gray'>Quantity {item.quantity}</p>
+                      </div>
                       <p className='text-[#4A69E2] font-semibold'>${item.price}</p>
                     </Grid.items>
                   </Grid>

@@ -1,6 +1,8 @@
 import review1 from '../assets/Image/review1.jpg';
+import review2 from '../assets/Image/review2.png';
+import review3 from '../assets/Image/review3.png';
 
-const Revviewr = [
+export const Revview = [
   {
     nama: 'I Kadek Andika',
     review: 'I highly recommend shopping from kicks',
@@ -11,15 +13,15 @@ const Revviewr = [
   {
     nama: 'Fachri Taufiqurrahman',
     review: 'I highly recommend shopping from kicks',
-    profileImg: '',
+    profileImg: review2,
     rating: 5,
-    productImhg: '',
+    productImhg: review2,
   },
   {
     nama: 'Sheehan Rafee Effendi',
     review: 'I highly recommend shopping from kicks',
-    profileImg: '',
+    profileImg: review3,
     rating: 4,
-    productImhg: '',
+    productImhg: review3,
   },
 ];

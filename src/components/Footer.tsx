@@ -40,7 +40,7 @@ const Footer = () => {
               <h1 className='text-2xl md:text-3xl  text-[#FFA52F] font-semibold mb-4'>Category</h1>
               <ul className='text-lg list-none flex flex-col gap-2 text-white sm:text-xl'>
                 <li className='cursor-pointer hover:text-[#FFA52F]'>Runners</li>
-                <li className='cursor-pointer hover:text-[#FFA52F]'>Sneakers</li>
+                <li className='cursor-pointer hover:text-[#FFA52F]'>Casual</li>
                 <li className='cursor-pointer hover:text-[#FFA52F]'>Basketball</li>
                 <li className='cursor-pointer hover:text-[#FFA52F]'>OutDoor</li>
                 <li className='cursor-pointer hover:text-[#FFA52F]'>Golf</li>
