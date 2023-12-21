@@ -26,12 +26,12 @@ const ShoesData: ShoeModel[] = [
     id: 1,
     nama: 'ADIDAS 4DFWD X PARLEY RUNNING SHOES',
     thumbnail: shoe1,
-    harga: '100.00',
+    harga: '8000000',
     tag: 'new',
     gambar: [shoe1, detail1, detail2, detail3],
     color: [
       {
-        nama: 'navy',
+        nama: 'Shadow Navy',
         color: '#253043',
       },
       {
@@ -49,7 +49,7 @@ const ShoesData: ShoeModel[] = [
     gambar: [shoe2, ozelia1, ozelia2, ozelia3],
     color: [
       {
-        nama: 'navy',
+        nama: 'Shadow Navy',
         color: '#253043',
       },
       {
@@ -64,10 +64,11 @@ const ShoesData: ShoeModel[] = [
     thumbnail: shoe3,
     harga: '145.00',
     tag: 'new',
+    Discount: 20,
     gambar: [shoe3, wd1, wd2, wd3],
     color: [
       {
-        nama: 'navy',
+        nama: 'Shadow Navy',
         color: '#253043',
       },
       {

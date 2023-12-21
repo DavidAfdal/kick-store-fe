@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { configureStore, combineReducers, AnyAction, Reducer  } from '@reduxjs/toolkit';
 import { cartReducer } from './reducer/cartSlice';
 import { likeReducer } from './reducer/likeSlice';
 import storage from 'redux-persist/lib/storage';
@@ -14,6 +14,17 @@ const rootReducer = combineReducers({
   likeReducer,
 });
 
+const rootReducers: Reducer = (state: RootState, action: AnyAction) => {
+  if (action.type === 'cart/clearResults') {
+
+    // this applies to all keys defined in persistConfig(s)
+    storage.removeItem('persist:root')
+
+    state = {} as RootState
+  }
+  return rootReducer(state, action)
+}
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
@@ -26,6 +37,7 @@ export const store = configureStore({
     }),
 });
 
+export default rootReducers;
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,12 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ShoesData from '../data/ShoesData';
 import Banner from '../components/Banner';
 import Grid from '../components/Grid';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import Card from '../components/Card';
-import review1 from '../assets/Image/review1.jpg';
 import ReviewCard from '../components/ReviewCard';
 import category1 from '../assets/Image/category1.png';
 import category2 from '../assets/Image/category2.png';
@@ -18,21 +16,43 @@ import { Navigation } from 'swiper/modules';
 import Modal from '../components/Modal';
 import axios from 'axios';
 import { Revview } from '../data/ReviewData';
+import SkeletonCard from '../components/SkeletonCard';
+import { Product } from '../models/shoesModel';
+import { ConvertRupiah } from '../utils/formater';
+
+
 
 const HomePage = () => {
   const [modalI, setModalI] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [recomand, setRecomand] = React.useState<Product[] | null>(null);
   const navigate = useNavigate();
+
+
   React.useEffect(() => {
+    setLoading(true)
     const getData = async () => {
       try {
-        const sepatu = await axios.get('http://localhost:5000/api/job');
-        console.log(sepatu);
+        const {
+          data: { data },
+        } = await axios.get('http://localhost:5000/api/shoe/recomand?limit=4');
+        setRecomand(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false)
       }
     };
 
-    getData();
+   
+    const timer = setTimeout(() => {
+      getData();
+    }, 5000);
+    
+    return ()  => {
+      clearTimeout(timer)
+    }
+
   }, []);
   const handleClick = (path: string) => {
     navigate(path);
@@ -52,18 +72,22 @@ const HomePage = () => {
           <Button onClick={() => handleClick('/shop')}>SHOP NEW DROPS</Button>
         </div>
         <Grid columnsAmount={2} className='lg:grid-cols-4'>
-          {ShoesData.slice(0, 4).map((data) => (
+          {loading ? 
+           Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+          : recomand?.map((data) => 
+            (
             <Grid.items key={data.id}>
-              <Card>
-                <Card.Img src={data.thumbnail} alt='coba' tags={data.tag} diskon={data.Discount} />
-                <Card.Title>{data.nama}</Card.Title>
-                <Card.Button onClick={() => navigate(`/details/${data.id}`)}>
-                  View Product - <span className='text-[#FFA52F]'>&nbsp;${data.harga}</span>
-                  {}
-                </Card.Button>
-              </Card>
+                <Card>
+                  <Card.Img src={data.thumbImg} alt='coba' diskon={data.diskon} createdAt={data.createdAt} />
+                  <Card.Title>{data.name}</Card.Title>
+                  <Card.Button onClick={() => navigate(`/details/${data.id}`)}>
+                    View Product - <span className='text-[#FFA52F]'>&nbsp;{ConvertRupiah(data.price)}</span>
+
+                  </Card.Button>
+                </Card>
             </Grid.items>
-          ))}
+          ))
+          }
         </Grid>
       </Container>
 
@@ -161,7 +185,7 @@ const HomePage = () => {
       <Container>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold'>REVIEWS</h1>
-          <Button>SEE ALL</Button>
+          <Button type="button">SEE ALL</Button>
         </div>
         <Grid columnsAmount={1} className='lg:grid-cols-3 [&>*:nth-child(3)]:hidden [&>*:nth-child(2)]:hidden lg:[&>*:nth-child(2)]:block lg:[&>*:nth-child(3)]:block'>
           {Revview.map((data, i) => (

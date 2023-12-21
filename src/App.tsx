@@ -4,53 +4,58 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store.ts';
 import { PersistGate } from 'redux-persist/integration/react';
-import ScrollToTop from './components/ScroolTop.tsx';
-import HomePage from './page/HomePage';
-import ShopPage from './page/ShopPage';
-import DetailsPage from './page/DetailsPage';
-import CheckoutPage from './page/CheckoutPage';
-import CartPage from './page/CartPage';
-import LoginPage from './page/LoginPage';
-import RegisterPage from './page/RegisterPage';
 import { AuthContext } from './context/auth-context.tsx';
-import Layout from './components/Layout.tsx';
-import Dashboard from './components/Dashboard.tsx';
-import ProfilePage from './page/ProfilePage.tsx';
-import FavoritPage from './page/FavoritPage.tsx';
-import HistoryPage from './page/HistoryPage.tsx';
+import ScrollToTop from './components/ScroolTop.tsx';
+import LoadingScrren from './components/LoadingScrren.tsx';
+const Dashboard = React.lazy(() => import('./components/Dashboard.tsx'));
+const Layout = React.lazy(() => import('./components/Layout.tsx')) ;
+const CheckoutPage = React.lazy(() => import('./page/CheckoutPage'));
+const CartPage = React.lazy(() => import('./page/CartPage'));
+const LoginPage = React.lazy(() => import('./page/LoginPage'));
+const RegisterPage = React.lazy(() => import('./page/RegisterPage'));
+const HomePage = React.lazy(() =>  import("./page/HomePage.tsx"))
+const ShopPage = React.lazy(() => import('./page/ShopPage'));
+const DetailsPage = React.lazy(() => import('./page/DetailsPage'))
+const ProfilePage = React.lazy(() => import('./page/ProfilePage'))
+const FavoritPage = React.lazy(() => import('./page/FavoritPage'))
+const HistoryPage = React.lazy(() => import('./page/HistoryPage'))
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
-  const [userId, setUserId] = React.useState<number | null>(null);
+  const [token, setToken] = React.useState<string | null>(null);
 
-  const login = React.useCallback((userId: number) => {
+  const login = React.useCallback((token: string) => {
     setIsLoggedIn(true);
-    setUserId(userId);
-    sessionStorage.setItem('userData', JSON.stringify({ userId: userId }));
+    setToken(token);
+    sessionStorage.setItem('token', JSON.stringify({ token }));
   }, []);
 
   const logout = React.useCallback(() => {
     setIsLoggedIn(false);
-    setUserId(null);
-    sessionStorage.removeItem('userData');
+    setToken(null);
+    sessionStorage.removeItem('token');
   }, []);
 
   React.useEffect(() => {
-    const storedDataString = sessionStorage.getItem('userData');
+    const storedDataString = sessionStorage.getItem('token');
     if (storedDataString !== null) {
       const storedData = JSON.parse(storedDataString);
-      if (storedData && storedData.userId !== null) {
-        login(parseInt(storedData.userId));
+      if (storedData && storedData.token !== null) {
+        login(storedData.token);
       }
     }
   }, [login]);
+
+
   return (
     <>
-      <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
+      <AuthContext.Provider value={{ isLoggedIn, token, login, logout }}>
         <BrowserRouter>
           <ScrollToTop>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
+                  <React.Suspense fallback={<LoadingScrren/>}> 
                 <Routes>
                   <Route path='/' element={<Layout />}>
                     <Route path='/' element={<HomePage />} />
@@ -66,7 +71,9 @@ function App() {
                     <Route path='/favorit' element={<FavoritPage />} />
                     <Route path='/history' element={<HistoryPage />} />
                   </Route>
+                 
                 </Routes>
+                  </React.Suspense>
               </PersistGate>
             </Provider>
           </ScrollToTop>

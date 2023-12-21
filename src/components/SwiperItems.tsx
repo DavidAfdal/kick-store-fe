@@ -1,17 +1,29 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import { ShoeModel } from '../models/shoesModel';
+import { Product } from '../models/shoesModel';
 import { useNavigate } from 'react-router-dom';
 import Card from './Card';
 import 'swiper/css';
+import { ConvertRupiah } from '../utils/formater';
+import SkeletonCard from './SkeletonCard';
+import Grid from './Grid';
 
 type SwiperItemsProps = {
-  data: ShoeModel[];
+  data: Product[] | null;
+  loading?: boolean;
 };
 
-const SwiperItems = ({ data }: SwiperItemsProps) => {
+const SwiperItems = ({ data, loading = false}: SwiperItemsProps) => {
   const navigate = useNavigate();
-  return (
+  return loading ?   
+  <Grid columnsAmount={4}>
+
+    {Array.from({length: 4}).map((_,i) => (
+   <SkeletonCard key={i}/>
+    ))}
+  </Grid>  
+ :
+
     <Swiper
       spaceBetween={16}
       slidesPerView={4}
@@ -30,20 +42,26 @@ const SwiperItems = ({ data }: SwiperItemsProps) => {
         prevEl: '.swiper-button-prev',
       }}
     >
-      {data.slice(0, 8).map((data) => (
+      { data !== null ?
+
+     
+      data.map((data) => (
         <SwiperSlide key={data.id}>
           <Card>
-            <Card.Img src={data.thumbnail} alt={data.nama} tags={data.tag} diskon={data.Discount} />
-            <Card.Title>{data.nama}</Card.Title>
+            <Card.Img src={data.thumbImg} alt={data.name} createdAt={data.createdAt} diskon={data.diskon} />
+            <Card.Title>{data.name}</Card.Title>
             <Card.Button onClick={() => navigate(`/details/${data.id}`)}>
               {' '}
-              View Product - <span className='text-[#FFA52F]'>&nbsp;${data.harga}</span>
+              View Product - <span className='text-[#FFA52F]'>&nbsp;{ConvertRupiah(data.price)}</span>
             </Card.Button>
           </Card>
         </SwiperSlide>
-      ))}
+      )) : null 
+      
+      }
+     
     </Swiper>
-  );
+  
 };
 
 export default SwiperItems;

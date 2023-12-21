@@ -6,6 +6,19 @@ type CardProps = {
   className?: string;
 } & React.ComponentProps<'div'>;
 
+const TagsProduct = ({ diskon, createdAt }: { diskon?: number; createdAt?: Date }) => {
+  let isProductNew = false;
+  if (createdAt) {
+    isProductNew = new Date(Date.now()).getDate() === new Date(createdAt).getDate() && new Date(Date.now()).getMonth() === new Date(createdAt).getMonth() && new Date(Date.now()).getFullYear() === new Date(createdAt).getFullYear();
+  }
+
+  return diskon && diskon !== 0 ? (
+    <div className='bg-[#FFA52F]  text-[#232321] absolute rounded-tl-[25px] rounded-br-[25px] font-semibold p-[15px]'>{`${diskon}% off`}</div>
+  ) : isProductNew ? (
+    <div className='bg-[#4A69E2]  text-white absolute rounded-tl-[25px] rounded-br-[25px] p-[15px]'>New</div>
+  ) : null;
+};
+
 const Card = ({ children, className, ...restProps }: CardProps) => {
   return (
     <div className={className} {...restProps}>
@@ -14,15 +27,11 @@ const Card = ({ children, className, ...restProps }: CardProps) => {
   );
 };
 
-const CardImg = ({ src, alt, tags, diskon }: { src: string; alt: string; tags?: string; diskon?: number }) => {
+const CardImg = ({ src, alt, diskon, createdAt }: { src: string; alt: string;  diskon?: number; createdAt?: Date }) => {
   return (
     <figure className='bg-white p-2 rounded-[25px] mb-4'>
       <div className='max-h-[300px] w-full  relative'>
-        {diskon ? (
-          <div className='bg-[#FFA52F]  text-[#232321] absolute rounded-tl-[25px] rounded-br-[25px] font-semibold p-[15px]'>{`${diskon}% off`}</div>
-        ) : tags !== undefined ? (
-          <div className='bg-[#4A69E2]  text-white absolute rounded-tl-[25px] rounded-br-[25px] p-[15px]'>{tags}</div>
-        ) : null}
+        <TagsProduct diskon={diskon} createdAt={createdAt} />
         <img src={src} alt={alt} className='max-h-[300px] w-full object-cover object-center rounded-[25px]' />
       </div>
     </figure>

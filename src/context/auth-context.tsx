@@ -2,8 +2,8 @@ import React from 'react';
 
 export type AuthContextType = {
   isLoggedIn: boolean;
-  userId: number | null;
-  login: (userId: number) => void;
+  token: string | null;
+  login: (token: string) => void;
   logout: () => void;
 };
 

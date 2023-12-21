@@ -1,41 +1,31 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { AppDispatch, RootState } from '../redux/store';
 import { CartItemModel } from '../models/cartModels';
-import ShoesData from '../data/ShoesData';
 import Container from '../components/Container';
 import Grid from '../components/Grid';
 import Button from '../components/Button';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import Modal from '../components/Modal';
 import { AiOutlineWarning, AiOutlinePlus, AiOutlineMinus, AiFillHeart } from 'react-icons/ai';
-import { decrementQuantity, incrementQuantity, removeItem } from '../redux/reducer/cartSlice';
+import {  decrementQuantityItems, deleteItems, fetchCartItems, incrementQuantityItems,} from '../redux/reducer/cartSlice';
 import SwiperItems from '../components/SwiperItems';
+import { ConvertRupiah } from '../utils/formater';
+import { AuthContext, AuthContextType } from '../context/auth-context';
+import axios from "axios";
+import { Product } from '../models/shoesModel';
+import { ToastContainer, toast } from 'react-toastify';
 
 const CartPage = () => {
-  const cart = useSelector((state: RootState) => state.cartReducer.cart);
-  const dispatch = useDispatch();
+  const {cart, isLoading, error} = useSelector((state: RootState) => state.cartReducer);
   const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = React.useState({ id: 0, color: '', size: 0 });
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-
-    // These options are needed to round to whole numbers if that's what you want.
-    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-  });
+  const [selectedItemId, setSelectedItemId] = React.useState(0);
+  const [recomandItem, setRecomandItem] = React.useState<Product[] | null>(null)
+  const [loading, setLoading] = React.useState<boolean>(false)
+  const {token} = React.useContext(AuthContext) as AuthContextType
   const navigate = useNavigate();
-  //   React.useEffect(() => {
-  //     async () => {
-  //       try {
-  //         const [products, reviews] = await Promise.all([axios.get(''), axios.get('')]);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //   }, []);
+  const dispatch = useDispatch<AppDispatch>();
 
   const getTotalQuantity = () => {
     let total = 0;
@@ -47,41 +37,80 @@ const CartPage = () => {
 
   const getTotalPriceItem = () => {
     let total = 0;
-    cart.forEach((item) => {
-      total += item.quantity * parseInt(item.price);
-    });
+    if (cart.length > 0) {
+      cart.forEach((item) => {
+        total += item.quantity * item.price;
+      });
+    }
 
-    return formatter.format(total);
+    return ConvertRupiah(total + 0);
   };
 
   const getTotalPrice = () => {
     let total = 0;
     cart.forEach((item) => {
-      total += item.quantity * parseInt(item.price);
+      total += item.quantity * item.price;
     });
 
-    return formatter.format(total + 6.99);
+    return ConvertRupiah(total + 35000);
   };
 
-  const handleConfirmClicksDelete = (id: number, color: string, size: number) => {
-    setSelectedItem({ id: id, color: color, size: size });
+  const handleConfirmClicksDelete = (id: number) => {
+    setSelectedItemId(id);
     setDeleteModal(true);
   };
 
   const handleClickDelete = () => {
-    dispatch(removeItem(selectedItem));
-    setDeleteModal(false);
+    if(token) {
+      dispatch(deleteItems({id: selectedItemId, token: token }));
+      setDeleteModal(false);
+    }
   };
+
+  const handleIncrementItems = (id : number) => {
+    if(token) {
+      console.log(token)
+      dispatch(incrementQuantityItems({id: id, token: token}))
+    }
+  }
+  const handleDecrementItems = (id : number) => {
+    if(token) {
+      dispatch(decrementQuantityItems({id: id, token: token}))
+    }
+  }
 
   const handleClickCheackOut = () => {
-    // try {
-    //   axios.post("",{})
-    // } catch (error) {
-    //   console.log(error)
-    // }
-
     navigate('/checkout');
   };
+
+
+
+  React.useEffect(() => {
+    
+    const GetResponse = async () => {
+      try {
+        const recomandProduct = await  axios.get('http://localhost:5000/api/shoe/recomand?limit=8');
+        setRecomandItem(recomandProduct.data.data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    setLoading(true)
+    const timer = setTimeout(() => {
+      if(token) {
+        dispatch(fetchCartItems(token))
+        GetResponse()
+        setLoading(false)
+      }
+    }, 3000)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, []);
+
+
 
   return (
     <main>
@@ -97,37 +126,44 @@ const CartPage = () => {
                 <Grid columnsAmount={2} key={i} className='mb-8 md:grid-cols-3'>
                   <Grid.items>
                     <div className='w-full min-h-[200px]'>
-                      <img src={item.thumbnail} alt='img1' style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                      <img src={item.shoe.thumbImg} alt='img1' style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                     </div>
                   </Grid.items>
                   <Grid.items className='md:col-span-2'>
                     <div className='flex flex-col gap-4'>
                       <div className='md:flex md:justify-between'>
-                        <p className='md:text-2xl font-semibold lg:w-[80%]'>{item.title}</p>
-                        <p className='hidden md:block text-[#4A69E2] font-semibold'>{formatter.format(parseInt(item.price))}</p>
+                        <p className='md:text-2xl font-semibold lg:w-[70%]'>{item.shoe.name}</p>
+                        <p className='hidden md:block text-[#4A69E2] font-semibold'>{ConvertRupiah(item.price * item.quantity)}</p>
                       </div>
-                      <p className='text-gray'>Men's Runners Shoe</p>
-                      <p>{item.color}</p>
+                      <p className='text-gray-500 capitalize font-semibold'>{item.shoe.type === "MALE" ? "Men's" : "Female's"} {item.shoe.category.toLowerCase()} shoes</p>
+                      <p className='text-gray-500 capitalize font-semibold'>{item.shoe_color}</p>
                       <div className='flex md:items-center gap-4 flex-col md:flex-row'>
-                        <p>Size : {item.size}</p>
+                        <p>Size : {item.shoe_size}</p>
                         <div className='flex md:items-center gap-4 flex-col md:flex-row'>
                           <p>Quantity :</p>
                           <div className='flex gap-4'>
+                          <button onClick={() => handleDecrementItems(item.id)} disabled={isLoading === "loading"}>
                             <div className='rounded-full bg-[#232321] p-1'>
-                              <AiOutlineMinus className='md:text-lg text-white' onClick={() => dispatch(decrementQuantity({ id: item.id, color: item.color, size: item.size }))} />
+                              <AiOutlineMinus className='md:text-lg text-white' />
+                              {/* onClick={() => dispatch(decrementQuantity({ id: item.id, color: item.color, size: item.size }))} */}
                             </div>
+                          </button>
 
                             <p className='text-gray text-lg'>{item.quantity}</p>
+                              <button onClick={() => handleIncrementItems(item.id)} disabled={isLoading === "loading"}>
                             <div className='rounded-full bg-[#232321] p-1'>
-                              <AiOutlinePlus className='md:text-lg text-white' onClick={() => dispatch(incrementQuantity({ id: item.id, color: item.color, size: item.size }))} />
+                              <AiOutlinePlus className='md:text-lg text-white' />
+                              {/* onClick={() => dispatch(incrementQuantity({ id: item.id, color: item.color, size: item.size }))} */}
                             </div>
+                              </button>
                           </div>
                         </div>
                       </div>
-                      <p className='md:hidden block text-[#4A69E2] font-semibold'>${item.price}</p>
+                      <p className='md:hidden block text-[#4A69E2] font-semibold'>{ConvertRupiah(item.price * item.quantity)}</p>
                       <div className='flex gap-4'>
                         <AiFillHeart className='w-[30px] h-[30px] hover:text-red-600 transition-colors' />
-                        <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors' onClick={() => handleConfirmClicksDelete(item.id, item.color, item.size)} />
+                        <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors'  onClick = {() => handleConfirmClicksDelete(item.id)} />
+                        {/* onClick={() => handleConfirmClicksDelete(item.id, item.color, item.size)} */}
                       </div>
                     </div>
                   </Grid.items>
@@ -141,11 +177,11 @@ const CartPage = () => {
               <div className='flex w-full flex-col gap-2 mt-2'>
                 <div className='flex justify-between'>
                   <p>{`${getTotalQuantity()} item`}</p>
-                  <p>{`${getTotalPriceItem()}`}</p>
+                  <p>{cart.length <= 0 ? `Rp 0`:`${getTotalPriceItem()}` }</p>
                 </div>
                 <div className='flex justify-between'>
                   <p>Delivery</p>
-                  <p>$6.99</p>
+                  <p>{ConvertRupiah(35000)}</p>
                 </div>
                 <div className='flex justify-between'>
                   <p>Sales Tax</p>
@@ -172,8 +208,10 @@ const CartPage = () => {
           </div>
         </div>
 
-        <SwiperItems data={ShoesData} />
+        <SwiperItems data={recomandItem} loading={loading}/>
       </Container>
+
+      <ToastContainer position='top-center' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
 
       <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
         <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col items-center gap-6'>

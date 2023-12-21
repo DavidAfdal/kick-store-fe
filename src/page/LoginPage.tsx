@@ -6,6 +6,9 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import CheckBox from '../components/CheckBox';
 import { AuthContext, AuthContextType } from '../context/auth-context';
+import Google from "../assets/icons/google.png"
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 const LoginPage = () => {
   const { login } = React.useContext(AuthContext) as AuthContextType;
@@ -14,12 +17,36 @@ const LoginPage = () => {
     email: '',
     password: '',
   });
+  
+  const loginWithGoogle = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (result) => {
+      console.log(result)
+      const respon = await axios.post("http://localhost:5000/api/auth/loginGoogle", {code: result.code})
+      login(respon.data.data);
+      navigate("/")
+      console.log(respon.data.data)
+    }
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(1);
-    navigate('/');
+    if (loginState.email.trim() !== "" && loginState.password.trim() !== "") {
+      try {
+        const response = await axios.post('http://localhost:5000/api/auth/login', loginState)
+        login(response.data.data);
+        navigate('/');
+      } catch (error) {
+        console.log(error);
+      }
+  
+    }
   };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {value, name} = event.target;
+      setLoginState({...loginState, [name]: value})
+  }
 
   return (
     <main>
@@ -28,14 +55,18 @@ const LoginPage = () => {
           <Grid.items>
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
               <h1 className='text-3xl font-semibold'>Login</h1>
-              <Input type='text' placeholder='Email' onChange={(e) => setLoginState({ ...loginState, email: e.target.value })} />
-              <Input type='password' placeholder='Password' />
+              <Input type='text' placeholder='Email' name='email' value={loginState.email} onChange={handleInputChange} />
+              <Input type='password' placeholder='Password' name='password' value={loginState.password} onChange={handleInputChange} />
               <Link to='/' className='underline'>
                 Forget Your Password
               </Link>
               <CheckBox label='Keep me logged in - applies to all log in options below. More info' className='w-4 h-4' />
               <Button className='bg-[#232321] justify-between flex ' type='submit'>
                 Login <span className='w-4 h-4'>&#129058;</span>
+              </Button>
+
+              <Button className='justify-between flex items-center bg-white border-black border text-[#232323]' onClick={() => loginWithGoogle()} type="button">
+                Sign In With Google <span className='w-8 h-8'><img src={Google} className='w-full h-full object-cover object-center'/></span>
               </Button>
               <p className='font-normal'>By clicking 'Log In' you agree to our website KicksClub Terms & Conditions, Kicks Privacy Notice and Terms & Conditions.</p>
             </form>
@@ -51,10 +82,10 @@ const LoginPage = () => {
                 <li>Special offers and promotions</li>
               </ul>
               <p>Join now to start earning points, reach new levels and unlock more rewards and benefits from adiClub </p>
-              <Button className='bg-[#232321] justify-between flex'>
+              <Button className='bg-[#232321] justify-between flex' type='button'>
                 JOIN THE CLUB <span className='w-4 h-4'>&#129058;</span>
               </Button>
-            </div>
+              </div>
           </Grid.items>
         </Grid>
       </Container>
