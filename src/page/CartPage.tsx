@@ -15,10 +15,10 @@ import { ConvertRupiah } from '../utils/formater';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import axios from "axios";
 import { Product } from '../models/shoesModel';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 const CartPage = () => {
-  const {cart, isLoading, error} = useSelector((state: RootState) => state.cartReducer);
+  const {cart, isLoading} = useSelector((state: RootState) => state.cartReducer);
   const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = React.useState(0);
   const [recomandItem, setRecomandItem] = React.useState<Product[] | null>(null)
@@ -108,7 +108,7 @@ const CartPage = () => {
     return () => {
       clearTimeout(timer)
     }
-  }, []);
+  }, [token]);
 
 
 

@@ -57,7 +57,7 @@ const LoginPage = () => {
               <h1 className='text-3xl font-semibold'>Login</h1>
               <Input type='text' placeholder='Email' name='email' value={loginState.email} onChange={handleInputChange} />
               <Input type='password' placeholder='Password' name='password' value={loginState.password} onChange={handleInputChange} />
-              <Link to='/' className='underline'>
+              <Link to='/forget-password' className='underline'>
                 Forget Your Password
               </Link>
               <CheckBox label='Keep me logged in - applies to all log in options below. More info' className='w-4 h-4' />

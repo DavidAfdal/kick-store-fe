@@ -326,7 +326,7 @@ const DetailsPage = () => {
               {productDetails?.diskon || 0 < 0? <div className='bg-[#FFA52F]  p-4 rounded-lg font-semibold text-xl w-[120px]'>{productDetails?.diskon}% off</div> :  checkNewProduct(productDetails?.createdAt as Date)? <div className='bg-[#4A69E2] p-4 rounded-lg font-normal text-xl w-[170px] text-white'>New Releasse</div> : null}
               <h1 className='text-3xl font-semibold'>{productDetails?.name}</h1>
               <p className='capitalize font-semibold text-gray-500'>{productDetails?.type.toUpperCase() ==="MALE" ? "Men's" : "Women's"} {productDetails?.category.toLowerCase()} shoes</p>
-              <div className='flex gap-4'>
+              <div className='flex gap-4 flex-col md:flex-row'>
                 <p className={`text-2xl text-[#4A69E2] font-semibold ${detailsData?.Discount ? 'line-through' : ''}`}>{ConvertRupiah(productDetails?.price)}</p>
                 {productDetails?.diskon !== 0 ? <p className='text-2xl text-[#4A69E2] font-semibold'> {ConvertRupiah(priceAfterDiscount(productDetails?.diskon || 10, productDetails?.price || 100000))}</p> : null}
               </div>
@@ -350,13 +350,16 @@ const DetailsPage = () => {
               {/* sizeshoes-selection */}
               <h1 className='font-semibold'>SIZE</h1>
               <Grid columnsAmount={5} className='sm:grid-cols-8'>
-                {productDetails?.sizes.map((data, i) => (
+                {productDetails?.sizes.map((data, i) => 
+                { const dataSize = size === 0 ? productDetails.sizes[0].size : size;
+                  return(
                   <Grid.items key={i}>
-                    <Button className={`bg-white ${size  === data.size ? 'bg-[#232321] text-white' : 'text-[#232321]'} py-3 disabled:bg-[#878787] disabled:text-[#b6b4b4]`} disabled={data.stock === 0} onClick={() => setSize(data.size)}>
+                    <Button className={`bg-white ${dataSize  === data.size ? 'bg-[#232321] text-white' : 'text-[#232321]'} py-3 disabled:bg-[#878787] disabled:text-[#b6b4b4]`} disabled={data.stock === 0} onClick={() => setSize(data.size)}>
                       {data.size}
                     </Button>
                   </Grid.items>
-                ))}
+                )}
+                )}
               </Grid>
 
               {/*button-details-section*/}

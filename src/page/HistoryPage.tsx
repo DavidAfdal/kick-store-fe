@@ -1,10 +1,11 @@
 import React from 'react';
 import Box from '../assets/Image/box.png';
 import Button from '../components/Button';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import axios from 'axios';
 import { OrderType } from '../models/orderModel';
+import { ConvertRupiah, DeliverdDay, FormatDateToDDMMYYYY } from '../utils/formater';
 
 const HistoryPage = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const HistoryPage = () => {
     <main>
       <section className='p-4'>
         <h1 className='text-3xl uppercase font-semibold'>History Order</h1>
-        {historyOrder.length <=0 ? (
+        {historyOrder.length <= 0 ? (
           <div className='h-screen flex justify-center items-center flex-col gap-4'>
             <img src={Box} alt='favoritImg' className='object-fit object-center w-[250px] h-[250px]' />
             <h1 className='text-3xl font-semibold'>No Order Product Yet</h1>
@@ -45,14 +46,39 @@ const HistoryPage = () => {
               </Button>
             </div>
           </div>
-        ) :  <div className="flex flex-col gap-4">
-           {historyOrder?.map((data, i) => (
-          <div className="flex gap-4" key={i}>
-            <p>Order Id : {data.id as string}</p>
-            <p>Packaging : Package</p>
-          </div>
+        ) :  
+
+          <table className="border-collapse border table-auto mt-[20px]">
+  <thead className="bg-[#4A69E2] text-white">
+    <tr>
+      
+      <th className='px-6 py-3'>Order Id</th>
+      <th className='px-6 py-3'>Order Date</th>
+      <th className='px-6 py-3'>Items</th>
+      <th className='px-6 py-3'>Total</th>
+      <th className='px-6 py-3'>Order Status</th>
+      <th className='px-6 py-4'>Payment</th>
+      <th className='px-6 py-4'>Delivery Date</th>
+      <th className='px-6 py-4'></th>
+    </tr>
+  </thead>
+  <tbody>
+  {historyOrder?.map((data, i) => (
+    <tr key={i} className='bg-white'>
+            <td className='px-6 py-3 text-center'>{data.id}</td>
+            <td className='px-6 py-3 text-center'>{FormatDateToDDMMYYYY(new Date(data.createdAt))}</td>
+            <td className='px-6 py-3 text-center'>{data.total_items}</td>
+            <td className='px-6 py-3 text-center'>{ConvertRupiah(data.total_price)}</td>
+            <td className='px-6 py-3 text-center'>Packed</td>
+            <td className='px-6 py-4 text-center'><p>Credit Card</p></td>
+            <td className='px-6 py-4 text-center'>{DeliverdDay(new Date(data.createdAt))}</td>
+            <td className = 'px-6 py-4 text-center'><Link to="/history">View Details</Link></td>
+          </tr>
            ))}
-          </div>}
+  </tbody>
+</table>
+           
+          }
       </section>
     </main>
   );

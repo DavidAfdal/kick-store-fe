@@ -279,9 +279,10 @@ const CheckoutPage = () => {
       <Modal open={open} onClose={handleClose}>
         <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col gap-4'>
           <div className='flex justify-center items-center'>
-           <Lottie animationData={sucees} autoPlay={true} style={{width: "150px", height: "150px"}}/>
+           <Lottie animationData={sucees} autoPlay={true} style={{width: "150px", height: "150px"}} loop={false}/>
           </div>
-          <p className="text-center text-2xl">Thanks For Choosing Kick Store. <br/> We Hope to See you Again In The Future.</p>
+          <p  className="text-center text-4xl">Success!</p>
+          <p className="text-center text-gray-500 text-lg">Thanks For Choosing Kick Store. We Hope to See you Again In The Future.</p>
         </div>
          
         </Modal> 

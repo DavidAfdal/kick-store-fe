@@ -101,12 +101,13 @@ const HomePage = () => {
             </div>
           </div>
           <div className='w-full min-h-[400px]'>
-            <Swiper
+          <Swiper
               modules={[Navigation]}
               navigation={{
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
               }}
+              slidesPerView={1}
             >
               <SwiperSlide>
                 <div className='grid grid-cols-1 sm:grid-cols-2'>
@@ -177,6 +178,7 @@ const HomePage = () => {
                   </div>
                 </div>
               </SwiperSlide>
+             
             </Swiper>
           </div>
         </div>
