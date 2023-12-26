@@ -89,7 +89,7 @@ const CartPage = () => {
     
     const GetResponse = async () => {
       try {
-        const recomandProduct = await  axios.get('http://localhost:5000/api/shoe/recomand?limit=8');
+        const recomandProduct = await  axios.get('http://localhost:5000/api/shoe/recomand?limit=9');
         setRecomandItem(recomandProduct.data.data)
       } catch (error) {
         console.log(error);

@@ -209,7 +209,7 @@ const DetailsPage = () => {
     setLoading(true)
     const getData = async () => {
       try {
-        const [productDetails, recommandProduct] = await Promise.all([axios.get(`http://localhost:5000/api/shoe/${id}`), axios.get('http://localhost:5000/api/shoe')]);
+        const [productDetails, recommandProduct] = await Promise.all([axios.get(`http://localhost:5000/api/shoe/${id}`), axios.get(`http://localhost:5000/api/shoe/recomand?id=${id}`)]);
         setProductDetails(productDetails.data.data);
         setRecomandedProduct(recommandProduct.data.data);
       } catch (error) {
@@ -323,12 +323,12 @@ const DetailsPage = () => {
               </>
               : 
               <>
-              {productDetails?.diskon || 0 < 0? <div className='bg-[#FFA52F]  p-4 rounded-lg font-semibold text-xl w-[120px]'>{productDetails?.diskon}% off</div> :  checkNewProduct(productDetails?.createdAt as Date)? <div className='bg-[#4A69E2] p-4 rounded-lg font-normal text-xl w-[170px] text-white'>New Releasse</div> : null}
+              {productDetails?.diskon as number  > 0? <div className='bg-[#FFA52F]  p-4 rounded-lg font-semibold text-xl w-[120px]'>{productDetails?.diskon}% Off</div> :  checkNewProduct(productDetails?.createdAt as Date)? <div className='bg-[#4A69E2] p-4 rounded-lg font-normal text-xl w-[170px] text-white'>New Releasse</div> : null}
               <h1 className='text-3xl font-semibold'>{productDetails?.name}</h1>
               <p className='capitalize font-semibold text-gray-500'>{productDetails?.type.toUpperCase() ==="MALE" ? "Men's" : "Women's"} {productDetails?.category.toLowerCase()} shoes</p>
               <div className='flex gap-4 flex-col md:flex-row'>
-                <p className={`text-2xl text-[#4A69E2] font-semibold ${detailsData?.Discount ? 'line-through' : ''}`}>{ConvertRupiah(productDetails?.price)}</p>
-                {productDetails?.diskon !== 0 ? <p className='text-2xl text-[#4A69E2] font-semibold'> {ConvertRupiah(priceAfterDiscount(productDetails?.diskon || 10, productDetails?.price || 100000))}</p> : null}
+                <p className={`text-2xl text-[#4A69E2] font-semibold ${productDetails?.diskon as number > 0  ? 'line-through' : ''}`}>{ConvertRupiah(productDetails?.price)}</p>
+                {productDetails?.diskon as number > 0 ? <p className='text-2xl text-[#4A69E2] font-semibold'> {ConvertRupiah(priceAfterDiscount(productDetails?.diskon || 10, productDetails?.price || 100000))}</p> : null}
               </div>
 
               {/* colorshoes-selection */}

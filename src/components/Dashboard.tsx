@@ -1,4 +1,3 @@
-import React from 'react';
 
 import Grid from './Grid';
 import { Outlet, Link, useLocation } from 'react-router-dom';
