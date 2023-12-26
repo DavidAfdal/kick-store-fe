@@ -35,7 +35,6 @@ const SwiperItems = ({ data, loading = false}: SwiperItemsProps) => {
           slidesPerView: 4,
         },
       }}
-      onSwiper={(swiper) => console.log(swiper)}
       modules={[Navigation]}
       navigation={{
         nextEl: '.swiper-button-next',

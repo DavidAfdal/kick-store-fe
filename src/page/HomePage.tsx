@@ -19,6 +19,7 @@ import { Revview } from '../data/ReviewData';
 import SkeletonCard from '../components/SkeletonCard';
 import { Product } from '../models/shoesModel';
 import { ConvertRupiah } from '../utils/formater';
+import 'swiper/css';
 
 
 
@@ -101,15 +102,14 @@ const HomePage = () => {
             </div>
           </div>
           <div className='w-full min-h-[400px]'>
-          <Swiper
-              modules={[Navigation]}
-              navigation={{
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              }}
-              slidesPerView={1}
-            >
-              <SwiperSlide>
+          <Swiper 
+          navigation={{
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          }}
+          modules={[Navigation]}>
+            
+<SwiperSlide>
                 <div className='grid grid-cols-1 sm:grid-cols-2'>
                   <div className='p-4 bg-[#ECEEF0]  rounded-tl-[25px]'>
                     <div className='flex justify-center'>
@@ -120,7 +120,6 @@ const HomePage = () => {
                       SHOES
                     </p>
                   </div>
-
                   <div className='p-4 bg-[#ECEEF0]'>
                     <div className='flex justify-center'>
                       <img src={category2} className='max-w[450px] max-h-[500px] object-cover object-center aspect-square' />
@@ -132,6 +131,8 @@ const HomePage = () => {
                   </div>
                 </div>
               </SwiperSlide>
+              
+
               <SwiperSlide>
                 <div className='grid grid-cols-1 sm:grid-cols-2'>
                   <div className='p-4 bg-[#ECEEF0]  rounded-tl-[25px]'>
@@ -155,6 +156,7 @@ const HomePage = () => {
                   </div>
                 </div>
               </SwiperSlide>
+              
               <SwiperSlide>
                 <div className='grid grid-cols-1 sm:grid-cols-2'>
                   <div className='p-4 bg-[#ECEEF0]  rounded-tl-[25px]'>
@@ -178,8 +180,7 @@ const HomePage = () => {
                   </div>
                 </div>
               </SwiperSlide>
-             
-            </Swiper>
+          </Swiper>
           </div>
         </div>
       </section>
@@ -223,3 +224,8 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+
+             
