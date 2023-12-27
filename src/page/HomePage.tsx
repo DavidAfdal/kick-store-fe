@@ -204,7 +204,7 @@ const HomePage = () => {
           ))}
         </Grid>
       </Container>
-
+{/* 
       <Modal open={modalI} onClose={() => setModalI(false)}>
         <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col gap-4'>
           <h1 className='text-2xl text-center uppercase text-blue-800 font-semibold'>Informasi</h1>
@@ -218,7 +218,7 @@ const HomePage = () => {
           </ul>
           <p className='text-center uppercase leading-8'>Dari Kelas 3KAO5 untuk melengkapi tugas mata kuliah Interaksi Manusia dan Komputer yang dibimbing oleh Ibu Dr. Feni Agustina, SKOM., MMSI.</p>
         </div>
-      </Modal>
+      </Modal> */}
     </main>
   );
 };
