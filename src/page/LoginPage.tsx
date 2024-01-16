@@ -8,7 +8,9 @@ import CheckBox from '../components/CheckBox';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import Google from "../assets/icons/google.png"
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import { HttpError } from '../models/errorModel';
 
 const LoginPage = () => {
   const { login } = React.useContext(AuthContext) as AuthContextType;
@@ -37,7 +39,18 @@ const LoginPage = () => {
         login(response.data.data);
         navigate('/');
       } catch (error) {
-        console.log(error);
+        const err = error as AxiosError;
+        const message = (err.response?.data as HttpError).message
+        toast.error(message, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
       }
   
     }
@@ -54,7 +67,16 @@ const LoginPage = () => {
         <Grid columnsAmount={1} className='lg:grid-cols-3'>
           <Grid.items>
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+              <div className='flex justify-between'>
+                
               <h1 className='text-3xl font-semibold'>Login</h1>
+              <Link to="/active-account" >
+              <Button className=' justify-between flex' type='button'>
+                Activate Account 
+              </Button>
+              </Link>
+                </div> 
+
               <Input type='text' placeholder='Email' name='email' value={loginState.email} onChange={handleInputChange} />
               <Input type='password' placeholder='Password' name='password' value={loginState.password} onChange={handleInputChange} />
               <Link to='/forget-password' className='underline'>
@@ -64,6 +86,8 @@ const LoginPage = () => {
               <Button className='bg-[#232321] justify-between flex ' type='submit'>
                 Login <span className='w-4 h-4'>&#129058;</span>
               </Button>
+              
+              
 
               <Button className='justify-between flex items-center bg-white border-black border text-[#232323]' onClick={() => loginWithGoogle()} type="button">
                 Sign In With Google <span className='w-8 h-8'><img src={Google} className='w-full h-full object-cover object-center'/></span>
@@ -81,14 +105,17 @@ const LoginPage = () => {
                 <li>Access to Members Only products and sales</li>
                 <li>Special offers and promotions</li>
               </ul>
-              <p>Join now to start earning points, reach new levels and unlock more rewards and benefits from adiClub </p>
-              <Button className='bg-[#232321] justify-between flex' type='button'>
+              <p>Join now to start earning points, reach new levels and unlock more rewards and benefits from KicksClub </p>
+              <Link to="/join" className='w-full'>
+              <Button className='bg-[#232321] justify-between flex w-full' type='button'>
                 JOIN THE CLUB <span className='w-4 h-4'>&#129058;</span>
               </Button>
+              </Link>
               </div>
           </Grid.items>
         </Grid>
       </Container>
+      <ToastContainer position='top-center' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
     </main>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Banner from '../components/Banner';
 import Grid from '../components/Grid';
 import Container from '../components/Container';
@@ -188,10 +188,12 @@ const HomePage = () => {
       <Container>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold'>REVIEWS</h1>
+          <Link to="/reviews">
           <Button type="button">SEE ALL</Button>
+          </Link>
         </div>
         <Grid columnsAmount={1} className='lg:grid-cols-3 [&>*:nth-child(3)]:hidden [&>*:nth-child(2)]:hidden lg:[&>*:nth-child(2)]:block lg:[&>*:nth-child(3)]:block'>
-          {Revview.map((data, i) => (
+          {Revview.slice(0,3).map((data, i) => (
             <Grid.items key={i}>
               <ReviewCard>
                 <ReviewCard.Content rating={data.rating} img={data.profileImg}>
@@ -204,7 +206,7 @@ const HomePage = () => {
           ))}
         </Grid>
       </Container>
-{/* 
+
       <Modal open={modalI} onClose={() => setModalI(false)}>
         <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col gap-4'>
           <h1 className='text-2xl text-center uppercase text-blue-800 font-semibold'>Informasi</h1>
@@ -218,7 +220,7 @@ const HomePage = () => {
           </ul>
           <p className='text-center uppercase leading-8'>Dari Kelas 3KAO5 untuk melengkapi tugas mata kuliah Interaksi Manusia dan Komputer yang dibimbing oleh Ibu Dr. Feni Agustina, SKOM., MMSI.</p>
         </div>
-      </Modal> */}
+      </Modal>
     </main>
   );
 };

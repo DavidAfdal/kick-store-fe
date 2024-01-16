@@ -16,6 +16,7 @@ import { AuthContext, AuthContextType } from '../context/auth-context';
 import axios from "axios";
 import { Product } from '../models/shoesModel';
 import { ToastContainer } from 'react-toastify';
+import Skeleton from '../components/Skeleton';
 
 const CartPage = () => {
   const {cart, isLoading} = useSelector((state: RootState) => state.cartReducer);
@@ -51,6 +52,7 @@ const CartPage = () => {
     cart.forEach((item) => {
       total += item.quantity * item.price;
     });
+    
 
     return ConvertRupiah(total + 35000);
   };
@@ -108,7 +110,7 @@ const CartPage = () => {
     return () => {
       clearTimeout(timer)
     }
-  }, [token]);
+  }, [token,dispatch]);
 
 
 
@@ -120,6 +122,34 @@ const CartPage = () => {
         <Grid columnsAmount={1} className='md:grid-cols-3 mt-4 md:gap-x-10'>
           <Grid.items className='md:col-span-2'>
             <div className='bg-white min-h-[200px] rounded-xl p-4'>
+             
+              {loading ? 
+              <>
+               <Skeleton className='mb-2 w-[30%] h-[25px]'/>
+               <Skeleton className='mb-4 w-[55%]'/>
+              {Array.from({length: 2}).map((_, i) => (
+                <Grid columnsAmount={2} key={i} className='mb-8 md:grid-cols-3'>
+                  <Skeleton className='w-full min-h-[250px]'/>
+                  <Grid.items className='md:col-span-2'>
+                  <div className='flex justify-between gap-10'>
+                        <Skeleton className='w-[400px] h-[25px]'/>
+                        <Skeleton className='w-[100px] h-[25px]'/>
+                      </div>
+                 
+                        <Skeleton className='w-[350px] h-[25px] mt-4'/>
+                        <Skeleton className='w-[300px] h-[25px] mt-4'/>
+
+                      <div className="flex gap-4">
+                      <Skeleton className='w-[150px] h-[25px] mt-4'/>
+                        <Skeleton className='w-[200px] h-[25px] mt-4'/>
+
+                      </div>
+                  </Grid.items>
+                </Grid>
+               ) )}
+              </>
+             :  
+             <>
               <p className='mb-2 text-3xl font-semibold'>Your Bag</p>
               <p className='mb-4'>Items in your bag not reserved- check out now to make them yours.</p>
               {cart.map((item: CartItemModel, i: number) => (
@@ -161,7 +191,7 @@ const CartPage = () => {
                       </div>
                       <p className='md:hidden block text-[#4A69E2] font-semibold'>{ConvertRupiah(item.price * item.quantity)}</p>
                       <div className='flex gap-4'>
-                        <AiFillHeart className='w-[30px] h-[30px] hover:text-red-600 transition-colors' />
+                        {/* <AiFillHeart className='w-[30px] h-[30px] hover:text-red-600 transition-colors' /> */}
                         <RiDeleteBin2Line className='w-[30px] h-[30px] hover:text-red-600 transition-colors'  onClick = {() => handleConfirmClicksDelete(item.id)} />
                         {/* onClick={() => handleConfirmClicksDelete(item.id, item.color, item.size)} */}
                       </div>
@@ -169,32 +199,65 @@ const CartPage = () => {
                   </Grid.items>
                 </Grid>
               ))}
+             </>
+          
+            }
+             
             </div>
           </Grid.items>
           <Grid.items>
             <div className='bg-white p-4 rounded-md min-h-[200px] w-full'>
-              <h1 className='text-2xl font-semibold'>Order Summary</h1>
-              <div className='flex w-full flex-col gap-2 mt-2'>
-                <div className='flex justify-between'>
-                  <p>{`${getTotalQuantity()} item`}</p>
-                  <p>{cart.length <= 0 ? `Rp 0`:`${getTotalPriceItem()}` }</p>
-                </div>
-                <div className='flex justify-between'>
-                  <p>Delivery</p>
-                  <p>{ConvertRupiah(35000)}</p>
-                </div>
-                <div className='flex justify-between'>
-                  <p>Sales Tax</p>
-                  <p>-</p>
-                </div>
-                <div className='flex justify-between'>
-                  <p className='font-semibold'>Total</p>
-                  <p className='font-semibold'>{getTotalPrice()}</p>
-                </div>
-              </div>
-              <Button className='bg-[#232321] mt-4 w-full disabled:bg-[#70706E]' onClick={handleClickCheackOut} disabled={cart.length === 0 ? true : false}>
+             
+              {loading ? 
+                  <>
+                  <Skeleton className='w-[50%] h-[25px] mb-4'/>
+                  <div className='flex w-full flex-col gap-4 mt-2'>
+                    <div className='flex justify-between'>
+                      <Skeleton className='w-[35%]'></Skeleton>
+                      <Skeleton className='w-[45%]'></Skeleton>
+                    </div>
+                    <div className='flex justify-between'>
+                      <Skeleton className='w-[45%]'></Skeleton>
+                      <Skeleton className='w-[35%]'></Skeleton>
+                    </div>
+                    <div className='flex justify-between'>
+                      <Skeleton className='w-[35%]'></Skeleton>
+                      <Skeleton className='w-[25%]'></Skeleton>
+                    </div>
+                    <div className='flex justify-between'>
+                      <Skeleton className='w-[35%]'></Skeleton>
+                      <Skeleton className='w-[45%]'></Skeleton>
+                    </div>
+                    <Skeleton className='h-[30px]'/>
+                    </div>
+                  </>
+                : 
+                  <>
+                   <h1 className='text-2xl font-semibold'>Order Summary</h1>
+                  <div className='flex w-full flex-col gap-2 mt-2'>
+                    <div className='flex justify-between'>
+                      <p>{`${getTotalQuantity()} item`}</p>
+                      <p>{cart.length <= 0 ? `Rp 0`:`${getTotalPriceItem()}` }</p>
+                    </div>
+                    <div className='flex justify-between'>
+                      <p>Delivery</p>
+                      <p>{cart.length <= 0 ? `Rp 0` : `${ConvertRupiah(35000)}`}</p>
+                    </div>
+                    <div className='flex justify-between'>
+                      <p>Sales Tax</p>
+                      <p>-</p>
+                    </div>
+                    <div className='flex justify-between'>
+                      <p className='font-semibold'>Total</p>
+                      <p className='font-semibold'> {cart.length <= 0 ? `Rp 0` : `${getTotalPrice()}`}</p>
+                    </div>
+                    </div>
+                    <Button className='bg-[#232321] mt-4 w-full disabled:bg-[#70706E]' onClick={handleClickCheackOut} disabled={cart.length === 0 ? true : false}>
                 Checkout
               </Button>
+                  </>
+                   }
+             
             </div>
           </Grid.items>
         </Grid>

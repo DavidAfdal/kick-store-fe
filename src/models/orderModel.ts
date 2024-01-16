@@ -12,6 +12,13 @@ export type OrderType = {
     updatedAt: string;
 }
 
+export type PaginationHistory = {
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  data: OrderType[]
+};
+
 
 export type OrderItemModel = {
     id: number;

@@ -7,6 +7,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { AuthContext } from './context/auth-context.tsx';
 import ScrollToTop from './components/ScroolTop.tsx';
 import LoadingScrren from './components/LoadingScrren.tsx';
+const ForgetPasswordPage  = React.lazy(() => import( './page/ForgetPasswordPage.tsx'));
+const JoinPage =  React.lazy(() => import('./page/JoinPage.tsx'));
+const ReviewsPage = React.lazy(() => import( './page/ReviewsPage.tsx'));
+const ResendEmailPage = React.lazy(() => import('./page/ResendEmailPage.tsx'));
 const Dashboard = React.lazy(() => import('./components/Dashboard.tsx'));
 const Layout = React.lazy(() => import('./components/Layout.tsx')) ;
 const CheckoutPage = React.lazy(() => import('./page/CheckoutPage'));
@@ -65,13 +69,16 @@ function App() {
                     <Route path='/cart' element={<CartPage />} />
                     <Route path='/login' element={<LoginPage />} />
                     <Route path='/register' element={<RegisterPage />} />
+                    <Route path="/reviews" element={<ReviewsPage/>} />
                   </Route>
                   <Route path='/' element={<Dashboard />}>
                     <Route path='/profile' element={<ProfilePage />} />
                     <Route path='/favorit' element={<FavoritPage />} />
                     <Route path='/history' element={<HistoryPage />} />
                   </Route>
-                 
+                  <Route path="/forget-password" element={<ForgetPasswordPage />} />
+                  <Route path="/active-account" element={<ResendEmailPage />} />
+                  <Route path="/join" element={<JoinPage/>} />
                 </Routes>
                   </React.Suspense>
               </PersistGate>

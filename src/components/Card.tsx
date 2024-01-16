@@ -30,7 +30,7 @@ const Card = ({ children, className, ...restProps }: CardProps) => {
 const CardImg = ({ src, alt, diskon, createdAt }: { src: string; alt: string;  diskon?: number; createdAt?: Date }) => {
   return (
     <figure className='bg-white p-2 rounded-[25px] mb-4'>
-      <div className='max-h-[300px] w-full  relative'>
+      <div className='h-[300px] w-full  relative'>
         <TagsProduct diskon={diskon} createdAt={createdAt} />
         <img src={src} alt={alt} className='max-h-[300px] w-full object-cover object-center rounded-[25px]' />
       </div>

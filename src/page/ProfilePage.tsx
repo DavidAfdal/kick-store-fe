@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import Grid from '../components/Grid';
-import ProfileImg from '../assets/Image/profileImg.webp';
+import ProfileImg from '../assets/Image/profile8.jpeg';
 import { PiMedalDuotone } from 'react-icons/pi';
 import axios from 'axios';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import Skeleton from '../components/Skeleton';
+import { FaCrown } from "react-icons/fa";
 
 const ProfilePage = () => {
   const [profile,setProfile] = React.useState({
@@ -74,7 +75,7 @@ const ProfilePage = () => {
                 <PiMedalDuotone className='w-[80px] h-[80px] mb-4' />
                 <div>
                   <p className='text-2xl mb-2 uppercase font-semibold'>Status</p>
-                  <p className='text-xl uppercase font-semibold'>{profile.status}</p>
+                  <p className='text-xl uppercase font-semibold flex gap-2 items-center'>{profile.status} {profile.status.toUpperCase() === "KICKS MEMBER" ?  <FaCrown /> : null}</p>
                 </div>
               </div>
             </div>

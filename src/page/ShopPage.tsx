@@ -120,6 +120,7 @@ const ShopPage = () => {
       min: minMax.min,
       max: minMax.max,
     })
+    setPage(1)
     console.log(minMax.max)
   }
 
@@ -135,15 +136,17 @@ const ShopPage = () => {
       min: 0,
       max: 0,
     })
-
+   setPage(1)
   }
 
   React.useEffect(() => {
     setLoading(true);
     const pagination = async () => {
+      console.log(searchFilter)
       try {
         const respon: AxiosResponse<PaginationEntity> = await axios.get(`http://localhost:5000/api/shoe?name=${searchFilter.name}&category=${searchFilter.category.join()}&type=${searchFilter.type.join()}&min=${searchFilter.min}&max=${searchFilter.max}&sort=${sort.split(',')[0]}&order=${sort.split(',')[1]}&page=${page}`);
         setData(respon.data);
+        console.log(respon.data);
       } catch (error) {
         console.log(error);
       } finally {
@@ -152,7 +155,7 @@ const ShopPage = () => {
     };
     const timer = setTimeout(() => {
       pagination();
-    }, 5000)
+    }, 3000)
    
     return () => {
       clearTimeout(timer)
@@ -212,7 +215,7 @@ const ShopPage = () => {
               <Accordion title='Price' onToggle={() => handleTogglePanel(3)} isOpen={openPanel.includes(3)}>
                 <div className='flex gap-4'>
                   <Input type='text' placeholder='Rp Min' value={minMax.min === 0 ? '' : formatRupiah(minMax?.min)} name='min' onChange={handleInputChange} />
-                  <Input type='text' placeholder='Rp Max' value={minMax.max === 0 ? '' : formatRupiah(minMax?.max || 0)} name='max' onChange={handleInputChange} />
+                  <Input type='text' placeholder='Rp Max' value={minMax.max === 0 ? '' : formatRupiah(minMax?.max)} name='max' onChange={handleInputChange} />
                 </div>
               </Accordion>
               <Button className='w-full bg-[#232321] disabled:bg-gray-900 disabled:text-gray-400' type="submit" disabled={loading}>Apply</Button>
@@ -221,12 +224,15 @@ const ShopPage = () => {
             </form>
           </Grid.items>
           <Grid.items className='col-span-3'>
+       
               {loading
                 ? 
                 <Grid columnsAmount={2} className='gap-y-8 lg:grid-cols-3'>
 
                   {Array.from({ length: 9 }).map((_, i) => <SkeletonCard key={i} />)}
                 </Grid>
+
+
                 
                 : data.data.length <= 0 ? 
                 <div className='h-full flex justify-center items-center'>
@@ -273,6 +279,7 @@ const ShopPage = () => {
                     <p className='block lg:hidden'>{`<`}</p>
                   </button>
                 }
+                initialPage={page-1}
                 renderOnZeroPageCount={null}
                 onPageChange={handleChangePage}
                 className='flex gap-2 lg:gap-4 pagination'
@@ -280,7 +287,7 @@ const ShopPage = () => {
               }
             </div>
           </Grid.items>
-        </Grid>
+        </Grid>                                                                                           
       </Container>
     </main>
   );

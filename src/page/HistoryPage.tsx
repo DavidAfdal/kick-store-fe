@@ -4,37 +4,44 @@ import Button from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import axios from 'axios';
-import { OrderType } from '../models/orderModel';
+import { PaginationHistory } from '../models/orderModel';
 import { ConvertRupiah, DeliverdDay, FormatDateToDDMMYYYY } from '../utils/formater';
+import ReactPaginate from 'react-paginate';
 
 const HistoryPage = () => {
   const navigate = useNavigate();
   const {token} = React.useContext(AuthContext) as AuthContextType
-  const [historyOrder, setHistoryOrder] = React.useState<OrderType[]>([])
+  const [historyOrder, setHistoryOrder] = React.useState<PaginationHistory | null >(null)
+  const [page,setPage] = React.useState<number>(1);
+
+
+  const handleChangePage = (selecteditem: { selected: number }) => {
+    setPage(selecteditem.selected + 1);
+  };
 
   React.useEffect(() => {
     const getHistoryOrder =  async () => {
       try {
-        const response = await axios.get<{status: string, message: string, data: OrderType[]}>("http://localhost:5000/api/order/history", {
+        const response = await axios.get<PaginationHistory>(`http://localhost:5000/api/order/history?page=${page}`, {
           headers: {
             Authorization:  `Bearer ${token}`
           }
         })
         console.log(response)
-        setHistoryOrder(response.data.data)
-        console.log(response.data.data)
+        setHistoryOrder(response.data)
+        console.log(response.data)
       } catch (error) {
         console.log(error);
       }
     }
     
     getHistoryOrder()
-  }, [token])
+  }, [token, page])
   return (
     <main>
       <section className='p-4'>
         <h1 className='text-3xl uppercase font-semibold'>History Order</h1>
-        {historyOrder.length <= 0 ? (
+        {(historyOrder?.data.length ?? 0) <= 0 ? (
           <div className='h-screen flex justify-center items-center flex-col gap-4'>
             <img src={Box} alt='favoritImg' className='object-fit object-center w-[250px] h-[250px]' />
             <h1 className='text-3xl font-semibold'>No Order Product Yet</h1>
@@ -63,7 +70,7 @@ const HistoryPage = () => {
     </tr>
   </thead>
   <tbody>
-  {historyOrder?.map((data, i) => (
+  {historyOrder?.data?.map((data, i) => (
     <tr key={i} className='bg-white'>
             <td className='px-6 py-3 text-center'>{data.id}</td>
             <td className='px-6 py-3 text-center'>{FormatDateToDDMMYYYY(new Date(data.createdAt))}</td>
@@ -80,6 +87,32 @@ const HistoryPage = () => {
            
           }
       </section>
+      <div className='flex justify-center mt-8 px-2'>
+              { (historyOrder?.data?.length ?? 0) <= 0 ? null :
+              <ReactPaginate
+                breakLabel='...'
+                nextLabel={
+                  <button className='border border-[#232321] px-4 py-1 rounded-[5px] disabled:text-gray-500 disabled:border-gray-500' disabled={page === historyOrder?.totalPages}>
+                    <p className='hidden lg:block'>{`NEXT >`}</p>
+                    <p className='block lg:hidden'>{`>`}</p>
+                  </button>
+                }
+                pageRangeDisplayed={2}
+                marginPagesDisplayed={1}
+                pageClassName='pagination-items'
+                pageCount={historyOrder?.totalPages ?? 10}
+                previousLabel={
+                  <button className='border border-[#232321] px-4 py-1 rounded-[5px] disabled:text-gray-500 disabled:border-gray-500' disabled={page === 1}>
+                    <p className='hidden lg:block'>{`< PREVIOUS`}</p>
+                    <p className='block lg:hidden'>{`<`}</p>
+                  </button>
+                }
+                renderOnZeroPageCount={null}
+                onPageChange={handleChangePage}
+                className='flex gap-2 lg:gap-4 pagination'
+              />
+              }
+            </div>
     </main>
   );
 };

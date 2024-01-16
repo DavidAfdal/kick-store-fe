@@ -104,20 +104,29 @@ const DetailsPage = () => {
   const handleLike = () => {
     if (isLoggedIn) {
       if (likeItem) {
-        dispatch(toggleLike(detailsData?.id));
-        dispatch(removeItem(detailsData?.id));
+        dispatch(toggleLike(productDetails?.id));
+        dispatch(removeItem(productDetails?.id));
+        toast.info('Success remove favorit item', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
       } else {
-        if (detailsData) {
-          dispatch(toggleLike(detailsData?.id));
+        if (productDetails) {
+          dispatch(toggleLike(productDetails?.id));
           dispatch(
             addItem({
-              id: detailsData.id,
-              nama: detailsData.nama,
-              thumbnail: detailsData.thumbnail,
-              harga: detailsData.harga,
-              tag: detailsData.tag,
-              Discount: detailsData.Discount,
-              color: detailsData.color,
+              id: productDetails.id,
+              name: productDetails.name,
+              thumbImg: productDetails.images[0].url,
+              price: productDetails.price,
+              createdAt: productDetails.createdAt,
+              diskon: productDetails.diskon,
               like: true,
             })
           );
@@ -140,7 +149,7 @@ const DetailsPage = () => {
 
   const handleBuyNow = () => {
     if (isLoggedIn) {
-      if (detailsData) {
+      if (productDetails) {
         const data: CartInput = {
           shoeId: parseInt(id as string),
           cart_color: selectedColor === '' ? productDetails?.colors[0].name as string : selectedColor as string,
@@ -403,21 +412,6 @@ const DetailsPage = () => {
           </div>
         </div>
 
-        {/* list of Rekomendation products */}
-        {/* <Grid columnsAmount={2} className='lg:grid-cols-4'>
-          {ShoesData.slice(0, 4).map((data) => (
-            <Grid.items key={data.id}>
-              <Card>
-                <Card.Img src={data.thumbnail} alt={data.nama} tags={data.tag} diskon={data.Discount} />
-                <Card.Title>{data.nama}</Card.Title>
-                <Card.Button onClick={() => navigate(`/details/${data.id}`)}>
-                  {' '}
-                  View Product - <span className='text-[#FFA52F]'>&nbsp;${data.harga}</span>
-                </Card.Button>
-              </Card>
-            </Grid.items>
-          ))}
-        </Grid> */}
 
         <SwiperItems data={recomandedProduct} loading={loading} />
       </Container>

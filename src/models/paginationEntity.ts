@@ -7,4 +7,6 @@ type PaginationEntity = {
   data: Product[];
 };
 
+
+
 export default PaginationEntity;

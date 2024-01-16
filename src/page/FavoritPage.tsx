@@ -36,10 +36,10 @@ const FavoritPage = () => {
             {Likes.map((like, i) => (
               <Grid.items key={i}>
                 <Card>
-                  <Card.Img src={like.thumbnail} alt={like.nama}  diskon={like.Discount} />
-                  <Card.Title>{like.nama}</Card.Title>
+                  <Card.Img src={like.thumbImg} alt={like.name}  diskon={like.diskon} createdAt={like.createdAt} />
+                  <Card.Title>{like.name}</Card.Title>
                   <AiFillHeart className={`${like.like ? 'text-red-600' : 'text-black'} curosr-pointer w-[30px] h-[30px] mb-2 hover:text-black transition-colors cursor-pointer`} onClick={() => handelClickLike(like.id)} />
-                  <Card.Button onClick={() => navigate(`/detail/${like.id}`)}>View Products</Card.Button>
+                  <Card.Button onClick={() => navigate(`/details/${like.id}`)}>View Products</Card.Button>
                 </Card>
               </Grid.items>
             ))}

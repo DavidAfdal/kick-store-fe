@@ -8,9 +8,9 @@ import { IoPersonOutline, IoDocumentTextOutline } from 'react-icons/io5';
 const Dashboard = () => {
   const location = useLocation();
   return (
-    <main>
+    <main className='h-full'>
       <Grid columnsAmount={5}>
-        <Grid.items className='p-4 bg-white h-screen'>
+        <Grid.items className='p-4 bg-white min-h-screen h-full'>
           <div className='flex flex-col gap-4'>
             <Link to='/' className={`w-full p-4 hover:bg-[#4A69E2]  flex gap-3 items-center transition-colors hover:text-white`}>
               <FaHouse />

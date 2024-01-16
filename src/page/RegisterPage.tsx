@@ -9,7 +9,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import { useGoogleLogin } from '@react-oauth/google';
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { HttpError } from '../models/errorModel';
+import { ToastContainer, toast } from 'react-toastify';
 
 const RegisterPage = () => {
   const { login } = React.useContext(AuthContext) as AuthContextType;
@@ -53,7 +55,7 @@ const RegisterPage = () => {
     console.log(dataRegister)
     if(dataRegister.firstName.trim() !== "" && dataRegister.lastName.trim() !== "" && dataRegister.gender.trim() !== "" && dataRegister.password.trim() !== "" && dataRegister.email.trim() !== "" )
     try {
-      await axios.post('http://localhost:5000/api/auth/register' , {
+      const data = await axios.post('http://localhost:5000/api/auth/register' , {
         firstName: dataRegister.firstName,
         lastName: dataRegister.lastName,
         gender: dataRegister.gender,
@@ -69,9 +71,35 @@ const RegisterPage = () => {
         condition: "",
         loggedIn: ""
       })
-      navigate("/login")
+
+      toast.info(data.data.message, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+     
+      setTimeout(() => {
+        navigate("/login")
+      }, 2000)
+ 
     } catch (error) {
-      console.log(error)
+      const err = error as AxiosError;
+        const message = (err.response?.data as HttpError).message
+        toast.error(message, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
     }
  
   }
@@ -132,13 +160,16 @@ const RegisterPage = () => {
                 <li>Special offers and promotions</li>
               </ul>
               <p>Join now to start earning points, reach new levels and unlock more rewards and benefits from adiClub </p>
-              <Button className='bg-[#232321] justify-between flex'>
+              <Link to="/join" className='w-full'>
+              <Button className='bg-[#232321] justify-between flex w-full' type='button'>
                 JOIN THE CLUB <span className='w-4 h-4'>&#129058;</span>
               </Button>
+              </Link>
             </div>
           </Grid.items>
         </Grid>
       </Container>
+      <ToastContainer position='top-center' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
     </main>
   );
 };
