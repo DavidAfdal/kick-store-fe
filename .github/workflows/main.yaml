@@ -45,5 +45,5 @@ jobs:
             docker run -d \
               --name kicks-store-fe \
               -e VITE_BACKEND_URL=${{ secrets.BACKEND_URL }} \
-              -p 3000:3080 \
+              -p 3000:3000 \
               ${{ secrets.DOCKER_USERNAME }}/kicks-store-fe:latest
