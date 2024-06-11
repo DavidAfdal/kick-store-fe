@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    environment: kicks-Store-ENV
+    environment: Kicks-Store-ENV
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
 
   deployment:
     needs: build
-    environment: kicks-Store-ENV
+    environment: Kicks-Store-ENV
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to vps
