@@ -42,6 +42,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             whoami
+            docker stop kicks-store-fe || true && docker rm kicks-store-fe || true
             docker run -d \
               --name kicks-store-fe \
               -e VITE_BACKEND_URL=${{ secrets.BACKEND_URL }} \
