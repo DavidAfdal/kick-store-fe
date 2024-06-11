@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    environment: Kick-Store-ENV
+    environment: stagging
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
 
   deployment:
     needs: build
-    environment: Kick-Store-ENV
+    environment: stagging
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to vps
