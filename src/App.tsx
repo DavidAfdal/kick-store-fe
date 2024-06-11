@@ -28,6 +28,7 @@ const HistoryPage = React.lazy(() => import('./page/HistoryPage'))
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
   const [token, setToken] = React.useState<string | null>(null);
+  const [status, setStatus] = React.useState<string | null>("");
 
   const login = React.useCallback((token: string) => {
     setIsLoggedIn(true);
@@ -40,6 +41,8 @@ function App() {
     setToken(null);
     sessionStorage.removeItem('token');
   }, []);
+
+
 
   React.useEffect(() => {
     const storedDataString = sessionStorage.getItem('token');
@@ -54,7 +57,7 @@ function App() {
 
   return (
     <>
-      <AuthContext.Provider value={{ isLoggedIn, token, login, logout }}>
+      <AuthContext.Provider value={{ isLoggedIn, token, login, logout, status, setStatus }}>
         <BrowserRouter>
           <ScrollToTop>
             <Provider store={store}>

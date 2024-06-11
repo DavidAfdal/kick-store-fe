@@ -21,7 +21,7 @@ const CheckoutPage = () => {
   const cart = useSelector((state: RootState) => state.cartReducer.cart);
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const {token} = React.useContext(AuthContext) as AuthContextType
+  const {token, status} = React.useContext(AuthContext) as AuthContextType
   const [loading, setIsLoading] = React.useState<boolean>(false)
   const [open, setOpen] = React.useState<boolean>(false)
   const [checkoutState, setCheckoutState] = React.useState({
@@ -88,7 +88,10 @@ const CheckoutPage = () => {
       total += item.quantity * item.price;
     });
 
-    return ConvertRupiah(total + 35000);
+    console.log(status)
+    const hargaAkhir = status?.toUpperCase() === "KICKS MEMBER" ? (total+35000)-((total+35000* 15) / 100) : total + 35000
+
+    return ConvertRupiah(hargaAkhir);
   };
 
   const getTotalPriceApi = () => {
@@ -97,7 +100,11 @@ const CheckoutPage = () => {
       total += item.quantity * item.price;
     });
 
-    return total + 35000;
+
+
+    const hargaAkhir = status?.toUpperCase() === "KICKS MEMBER" ? (total+35000)-((total+35000* 15) / 100) : total + 35000
+
+    return hargaAkhir;
   };
   
   const handleClose = () => {
@@ -120,7 +127,7 @@ const CheckoutPage = () => {
      }
 
       try {
-        await axios.post("http://localhost:5000/api/order/checkout", data, {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/order/checkout`, data, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -240,6 +247,14 @@ const CheckoutPage = () => {
                     <p>Sales Tax</p>
                     <p>-</p>
                   </div>
+                  {status?.toUpperCase() === "KICKS MEMBER" ? 
+                     <div className='flex justify-between'>
+                     <p>Discount Member</p>
+                     <p>15%</p>
+                   </div>
+                    :
+                    null
+                    }
                   <div className='flex justify-between'>
                     <p className='font-semibold'>Total</p>
                     <p className='font-semibold'>{getTotalPrice()}</p>

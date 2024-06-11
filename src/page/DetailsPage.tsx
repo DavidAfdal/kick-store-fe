@@ -170,7 +170,7 @@ const DetailsPage = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", loginState)
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, loginState)
       login(response.data.data);
       setLoginState({
         email: "",
@@ -206,7 +206,7 @@ const DetailsPage = () => {
     flow: 'auth-code',
     onSuccess: async (result) => {
       console.log(result)
-      const respon = await axios.post("http://localhost:5000/api/auth/loginGoogle", {code: result.code})
+      const respon = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
       login(respon.data.data);
       // navigate("/")
       console.log(respon.data.data)
@@ -218,7 +218,7 @@ const DetailsPage = () => {
     setLoading(true)
     const getData = async () => {
       try {
-        const [productDetails, recommandProduct] = await Promise.all([axios.get(`http://localhost:5000/api/shoe/${id}`), axios.get(`http://localhost:5000/api/shoe/recomand?id=${id}`)]);
+        const [productDetails, recommandProduct] = await Promise.all([axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/${id}`), axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/recomand?id=${id}`)]);
         setProductDetails(productDetails.data.data);
         setRecomandedProduct(recommandProduct.data.data);
       } catch (error) {
@@ -320,7 +320,6 @@ const DetailsPage = () => {
                 <Skeleton className='w-[90%] grow-[2] h-[40px]'/>
                 <Skeleton className='w-[10%] grow-[1] h-[40px]'/>
               </div>
-
                 <Skeleton className='w-full h-[40px]'/>
                 <Skeleton className='w-[200px] h-[40px]'/> 
                 <div className='flex flex-col gap-2'>
@@ -425,7 +424,7 @@ const DetailsPage = () => {
             <Input type='email' placeholder='youremail@gmail.com' className='bg-white' value={loginState.email} name='email' onChange={handleInputChange}/>
             <div>
               <Input type='password' placeholder='password' className='bg-white mb-2' value={loginState.password} name='password' onChange={handleInputChange}/>
-              <Link to='/'>Forgot Password?</Link>
+              <Link to='/forget-password'>Forgot Password?</Link>
             </div>
             <Button type='submit'>Sign In</Button>
             

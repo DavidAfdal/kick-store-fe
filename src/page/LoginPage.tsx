@@ -24,7 +24,7 @@ const LoginPage = () => {
     flow: 'auth-code',
     onSuccess: async (result) => {
       console.log(result)
-      const respon = await axios.post("http://localhost:5000/api/auth/loginGoogle", {code: result.code})
+      const respon = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
       login(respon.data.data);
       navigate("/")
       console.log(respon.data.data)
@@ -35,7 +35,7 @@ const LoginPage = () => {
     e.preventDefault();
     if (loginState.email.trim() !== "" && loginState.password.trim() !== "") {
       try {
-        const response = await axios.post('http://localhost:5000/api/auth/login', loginState)
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, loginState)
         login(response.data.data);
         navigate('/');
       } catch (error) {

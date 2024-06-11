@@ -8,7 +8,7 @@ import Grid from '../components/Grid';
 import Button from '../components/Button';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import Modal from '../components/Modal';
-import { AiOutlineWarning, AiOutlinePlus, AiOutlineMinus, AiFillHeart } from 'react-icons/ai';
+import { AiOutlineWarning, AiOutlinePlus, AiOutlineMinus, } from 'react-icons/ai';
 import {  decrementQuantityItems, deleteItems, fetchCartItems, incrementQuantityItems,} from '../redux/reducer/cartSlice';
 import SwiperItems from '../components/SwiperItems';
 import { ConvertRupiah } from '../utils/formater';
@@ -23,8 +23,13 @@ const CartPage = () => {
   const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = React.useState(0);
   const [recomandItem, setRecomandItem] = React.useState<Product[] | null>(null)
+  const [profile,setProfile] = React.useState({
+    name: "",
+    email: "",
+    status: ""
+  })
   const [loading, setLoading] = React.useState<boolean>(false)
-  const {token} = React.useContext(AuthContext) as AuthContextType
+  const {token, setStatus} = React.useContext(AuthContext) as AuthContextType
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -52,9 +57,11 @@ const CartPage = () => {
     cart.forEach((item) => {
       total += item.quantity * item.price;
     });
+
+    const hargaAkhir = profile.status.toUpperCase() === "KICKS MEMBER" ? (total+35000)-((total+35000* 15) / 100) : total + 35000
     
 
-    return ConvertRupiah(total + 35000);
+    return ConvertRupiah(hargaAkhir);
   };
 
   const handleConfirmClicksDelete = (id: number) => {
@@ -91,18 +98,35 @@ const CartPage = () => {
     
     const GetResponse = async () => {
       try {
-        const recomandProduct = await  axios.get('http://localhost:5000/api/shoe/recomand?limit=9');
+        const recomandProduct = await  axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/recomand?limit=9`);
         setRecomandItem(recomandProduct.data.data)
       } catch (error) {
         console.log(error);
       }
     };
 
+    const getProfile = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/auth/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setProfile(response.data.data);
+        setStatus(response.data.data.status);
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      } 
+     }
+  
+
     setLoading(true)
     const timer = setTimeout(() => {
       if(token) {
         dispatch(fetchCartItems(token))
         GetResponse()
+        getProfile()
         setLoading(false)
       }
     }, 3000)
@@ -110,7 +134,7 @@ const CartPage = () => {
     return () => {
       clearTimeout(timer)
     }
-  }, [token,dispatch]);
+  }, [token, dispatch, setStatus]);
 
 
 
@@ -247,6 +271,15 @@ const CartPage = () => {
                       <p>Sales Tax</p>
                       <p>-</p>
                     </div>
+                    {profile.status.toUpperCase() === "KICKS MEMBER" ? 
+                     <div className='flex justify-between'>
+                     <p>Discount Member</p>
+                     <p>15%</p>
+                   </div>
+                    :
+                    null
+                    }
+                   
                     <div className='flex justify-between'>
                       <p className='font-semibold'>Total</p>
                       <p className='font-semibold'> {cart.length <= 0 ? `Rp 0` : `${getTotalPrice()}`}</p>

@@ -35,7 +35,7 @@ const RegisterPage = () => {
     flow: 'auth-code',
     onSuccess: async (result) => {
       console.log(result)
-      const data = await axios.post("http://localhost:5000/api/auth/loginGoogle", {code: result.code})
+      const data = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
       login(data.data.id);
       navigate("/")
     }
@@ -55,7 +55,7 @@ const RegisterPage = () => {
     console.log(dataRegister)
     if(dataRegister.firstName.trim() !== "" && dataRegister.lastName.trim() !== "" && dataRegister.gender.trim() !== "" && dataRegister.password.trim() !== "" && dataRegister.email.trim() !== "" )
     try {
-      const data = await axios.post('http://localhost:5000/api/auth/register' , {
+      const data = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register` , {
         firstName: dataRegister.firstName,
         lastName: dataRegister.lastName,
         gender: dataRegister.gender,

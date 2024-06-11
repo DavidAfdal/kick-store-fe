@@ -4,32 +4,32 @@ import axios from 'axios';
 
 
 export const fetchCartItems = createAsyncThunk('cart/fetchCartItems', async (token: string | null) => {
-  const response = await axios.get("http://localhost:5000/api/cart", {headers: {Authorization: `Bearer ${token}`} })
+  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/cart`, {headers: {Authorization: `Bearer ${token}`} })
   console.log(response.data)
   return response.data.data
   })
 
 export const addItems = createAsyncThunk('cart/addItems', async ({data, token} : {data: CartInput, token: string | null}) => {
   console.log(data)
-  const response = await axios.post("http://localhost:5000/api/cart",data, {headers: {Authorization: `Bearer ${token}`} })
+  const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/cart`,data, {headers: {Authorization: `Bearer ${token}`} })
   console.log(response.data.data)
   return response.data.data
   })
 
 export const incrementQuantityItems = createAsyncThunk('cart/incrementQuantityItems', async ( {id, token} : {id: number, token: string | null} ) => {
-    const response = await axios.put(`http://localhost:5000/api/cart/increment/${id}`, "",{headers: {Authorization: `Bearer ${token}`} })
+    const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/cart/increment/${id}`, "",{headers: {Authorization: `Bearer ${token}`} })
     console.log(response.data)
     return response.data.data
   })
 
 export const decrementQuantityItems = createAsyncThunk('cart/decrementQuantityItems', async ( {id, token} : {id: number, token: string | null} ) => {
-    const response = await axios.put(`http://localhost:5000/api/cart/decrement/${id}`, "",{headers: {Authorization: `Bearer ${token}`} })
+    const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/cart/decrement/${id}`, "",{headers: {Authorization: `Bearer ${token}`} })
     console.log(response.data)
     return response.data.data
   })
 
 export const deleteItems = createAsyncThunk('cart/deleteItems', async (  {id, token} : {id: number, token: string | null} ) => {
-    const response = await axios.delete(`http://localhost:5000/api/cart/${id}`, {headers: {Authorization: `Bearer ${token}`} })
+    const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/cart/${id}`, {headers: {Authorization: `Bearer ${token}`} })
     console.log(response.data)
     return response.data.data
   })

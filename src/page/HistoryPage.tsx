@@ -22,7 +22,7 @@ const HistoryPage = () => {
   React.useEffect(() => {
     const getHistoryOrder =  async () => {
       try {
-        const response = await axios.get<PaginationHistory>(`http://localhost:5000/api/order/history?page=${page}`, {
+        const response = await axios.get<PaginationHistory>(`${import.meta.env.VITE_BACKEND_URL}/api/order/history?page=${page}`, {
           headers: {
             Authorization:  `Bearer ${token}`
           }

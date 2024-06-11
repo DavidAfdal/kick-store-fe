@@ -144,7 +144,7 @@ const ShopPage = () => {
     const pagination = async () => {
       console.log(searchFilter)
       try {
-        const respon: AxiosResponse<PaginationEntity> = await axios.get(`http://localhost:5000/api/shoe?name=${searchFilter.name}&category=${searchFilter.category.join()}&type=${searchFilter.type.join()}&min=${searchFilter.min}&max=${searchFilter.max}&sort=${sort.split(',')[0]}&order=${sort.split(',')[1]}&page=${page}`);
+        const respon: AxiosResponse<PaginationEntity> = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shoe?name=${searchFilter.name}&category=${searchFilter.category.join()}&type=${searchFilter.type.join()}&min=${searchFilter.min}&max=${searchFilter.max}&sort=${sort.split(',')[0]}&order=${sort.split(',')[1]}&page=${page}`);
         setData(respon.data);
         console.log(respon.data);
       } catch (error) {

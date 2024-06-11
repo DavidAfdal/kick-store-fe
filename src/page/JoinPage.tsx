@@ -14,7 +14,7 @@ const JoinPage = () => {
         try {
             const {
                 data: { message },
-              }  = await axios.post("http://localhost:5000/api/auth/joinMember", {email});
+              }  = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/joinMember`, {email});
             console.log(message)
             toast.success(message, {
                 position: 'top-center',
@@ -47,7 +47,7 @@ const JoinPage = () => {
         <div className="w-[400px] bg-white p-6 rounded-md">
             <form onSubmit={hanldeJoinMember}>
             <h1 className="text-2xl mb-4">Join the club</h1>
-            <p className="text-sm mb-2">Please enter the email address you'd like your password reset information sent to</p>
+            <p className="text-sm mb-2">Please enter the email address, special invitation  to join our exclusive Member Club.</p>
             <label htmlFor="email" className="text-[12px] font-normal">Enter your email address</label>
             <Input type="text" placeholder="Email Address" name="email" className="mt-[4px]" value={email} onChange={(e) => setEmail(e.target.value)}/>
             <Button type="submit" className="w-full mt-6">Join the club</Button>

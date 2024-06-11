@@ -14,7 +14,7 @@ const ResendEmailPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
        try {
-         await axios.post("http://localhost:5000/api/auth//sendActived", {email})
+         await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth//sendActived`, {email})
          toast.info("Please check your email for the next step!", {
             position: 'top-center',
             autoClose: 5000,
