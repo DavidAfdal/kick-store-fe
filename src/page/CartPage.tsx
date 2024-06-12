@@ -107,7 +107,7 @@ const CartPage = () => {
 
     const getProfile = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/profile', {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
