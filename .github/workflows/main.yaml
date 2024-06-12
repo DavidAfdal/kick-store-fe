@@ -43,6 +43,10 @@ jobs:
           script: |
             whoami
             docker stop kicks-store-fe || true && docker rm kicks-store-fe || true
+           
+
+            docker pull ${{ secrets.DOCKER_USERNAME }}/kicks-store-fe:latest
+
             docker run -d \
               --name kicks-store-fe \
               -e VITE_BACKEND_URL=http://103.157.26.216:5000 \
