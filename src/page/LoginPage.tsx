@@ -13,7 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { HttpError } from '../models/errorModel';
 
 const LoginPage = () => {
-  const { login } = React.useContext(AuthContext) as AuthContextType;
+  const { login, setRole } = React.useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
   const [loginState, setLoginState] = React.useState({
     email: '',
@@ -25,9 +25,9 @@ const LoginPage = () => {
     onSuccess: async (result) => {
       console.log(result)
       const respon = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
-      login(respon.data.data);
-      navigate("/")
-      console.log(respon.data.data)
+      login(respon.data.data.token);
+      setRole(respon.data.data.role);
+      navigate('/');
     }
   });
 
@@ -36,8 +36,15 @@ const LoginPage = () => {
     if (loginState.email.trim() !== "" && loginState.password.trim() !== "") {
       try {
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, loginState)
-        login(response.data.data);
-        navigate('/');
+        console.log(response.data.data)
+        login(response.data.data.token);
+        setRole(response.data.data.role);
+
+        if(response.data.data.role === "ADMIN") {
+          navigate("/admin/dashboard")
+        } else {
+          navigate("/")
+        }
       } catch (error) {
         const err = error as AxiosError;
         const message = (err.response?.data as HttpError).message

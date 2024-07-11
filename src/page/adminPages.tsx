@@ -7,7 +7,7 @@ import { AuthContext, AuthContextType } from '../context/auth-context';
 import Skeleton from '../components/Skeleton';
 import { FaCrown } from "react-icons/fa";
 
-const ProfilePage = () => {
+const AdminPage = () => {
   const [profile,setProfile] = React.useState({
     name: "",
     email: "",
@@ -43,7 +43,7 @@ const ProfilePage = () => {
     <main>
       <section className='p-4 flex flex-col gap-4'>
 
-        <h1 className='text-3xl font-semibold uppercase'>Profile User</h1>
+        <h1 className='text-3xl font-semibold uppercase'>Profile Admin</h1>
         <div className='bg-white min-h-[200px] shadow-lg p-4 rounded-xl'>
         {isLoading ? 
         <>
@@ -65,11 +65,10 @@ const ProfilePage = () => {
           </Grid>
         </>
         :
-        <>  
-          <div className="flex items-center gap-x-4">
-
+        <>
+          <Grid columnsAmount={3}>
             <div>
-              <img src={ProfileImg} className='w-[200px] h-[200px] object-cover object-center rounded-full border border-[#232323]' />
+              <img src={ProfileImg} className='w-full h-[300px] object-cover object-center rounded-lg' />
             </div>
             <div className='col-span-2'>
               <h1 className='text-3xl  mb-2 font-semibold'>Hello, {profile.name}</h1>
@@ -82,8 +81,7 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div>
-          </div>
-    
+          </Grid>
         </>
         }
         </div>
@@ -92,4 +90,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default AdminPage;

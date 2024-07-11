@@ -16,6 +16,11 @@ import Spining from '../components/Spining';
 import Modal from '../components/Modal';
 import Lottie from 'lottie-react';
 import sucees from "../assets/icons/succes.json"
+import payment1 from '../assets/midtrans/payment1.png';
+import payment2 from '../assets/midtrans/payment2.png';
+import payment3 from '../assets/midtrans/payment3.png';
+import payment4 from '../assets/midtrans/payment4.png';
+import { MdOutlinePayment } from 'react-icons/md';
 
 const CheckoutPage = () => {
   const cart = useSelector((state: RootState) => state.cartReducer.cart);
@@ -25,24 +30,18 @@ const CheckoutPage = () => {
   const [loading, setIsLoading] = React.useState<boolean>(false)
   const [open, setOpen] = React.useState<boolean>(false)
   const [checkoutState, setCheckoutState] = React.useState({
-    firstName: "",
-    lastName: "",
     address: "",
     phoneNumber: "",
-    cardNumber: "",
-    cardYear: "",
-    cardMonth: "",
-    cvv:""
   });
 
-  const handleCreditCardInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+  // const handleCreditCardInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   let inputValue = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
 
-    // Format the credit card number with spaces after every 4 digits
-    inputValue = inputValue.replace(/(\d{4})/g, '$1 ').trim();
+  //   // Format the credit card number with spaces after every 4 digits
+  //   inputValue = inputValue.replace(/(\d{4})/g, '$1 ').trim();
 
-    setCheckoutState({...checkoutState, cardNumber: inputValue});
-  };
+  //   setCheckoutState({...checkoutState, cardNumber: inputValue});
+  // };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {value, name} = event.target;
@@ -56,7 +55,7 @@ const CheckoutPage = () => {
   }
 
   const checkAttributes = () => {
-    if(checkoutState.firstName.trim() !== "" && checkoutState.lastName.trim() !== "" && checkoutState.address.trim() !== "" && checkoutState.phoneNumber.trim() !== "" && checkoutState.cardNumber !== "" && checkoutState.cardYear !== "" && checkoutState.cardMonth !== "" && checkoutState.cvv !== "") {
+    if(checkoutState.address.trim() !== "" && checkoutState.phoneNumber.trim() !== "") {
       return true
     } else {
       return false
@@ -80,7 +79,13 @@ const CheckoutPage = () => {
     return ConvertRupiah(total);
   };
 
-
+  const taxes = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.quantity * item.price;
+    });
+    return ConvertRupiah(total * 0.05);
+  };
 
   const getTotalPrice = () => {
     let total = 0;
@@ -89,7 +94,7 @@ const CheckoutPage = () => {
     });
 
     console.log(status)
-    const hargaAkhir = status?.toUpperCase() === "KICKS MEMBER" ? (total+35000)-((total+35000* 15) / 100) : total + 35000
+    const hargaAkhir = status?.toUpperCase() === "KICKS MEMBER" ? (total+(total*0.05))-(((total+(total*0.05))* 15) / 100) : total + (total * 0.05)
 
     return ConvertRupiah(hargaAkhir);
   };
@@ -102,7 +107,7 @@ const CheckoutPage = () => {
 
 
 
-    const hargaAkhir = status?.toUpperCase() === "KICKS MEMBER" ? (total+35000)-((total+35000* 15) / 100) : total + 35000
+    const hargaAkhir = status?.toUpperCase() === "KICKS MEMBER" ? (total+(total*0.05))-(((total+(total*0.05))* 15) / 100) : total + (total * 0.05)
 
     return hargaAkhir;
   };
@@ -118,40 +123,33 @@ const CheckoutPage = () => {
       const data = {
       total_price: getTotalPriceApi(), 
       total_items: getTotalQuantity(), 
-      card_number: checkoutState.cardNumber, 
-      card_exp_month: checkoutState.cardMonth, 
-      card_exp_year: checkoutState.cardYear, 
-      card_cvv: checkoutState.cvv,
       address: checkoutState.address,
       phone_number: checkoutState.phoneNumber
      }
 
       try {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/order/checkout`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/order/checkout`, data, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
 
         setCheckoutState({
-        firstName: "",
-        lastName: "",
         address: "",
         phoneNumber: "",
-        cardNumber: "",
-        cardYear: "",
-        cardMonth: "",
-        cvv:""
+
         })
 
         dispatch(clearProducts())
 
-        setOpen(true)
+        // setOpen(true)
+       window.location.assign(response.data.paymentUrl)
+      
 
-        setTimeout(() => {
-          setOpen(false)
-          navigate("/")
-        }, 5000)
+        // setTimeout(() => {
+        //   setOpen(false)
+        //   navigate("/")
+        // }, 5000)
       } catch (error) {
         console.log(error);
         toast.error('Something Wrong please restart', {
@@ -179,22 +177,56 @@ const CheckoutPage = () => {
             <div className='mt-4'>
               <h1 className='mb-4 text-3xl font-semibold'>Shipping Address</h1>
               <Grid columnsAmount={1} className='lg:grid-cols-2 mt-4'>
-                <Grid.items>
-                  <Input type='text' placeholder='First Name*' name='firstName' value={checkoutState.firstName} onChange={handleInputChange}></Input>
-                </Grid.items>
-                <Grid.items>
-                  <Input type='text' placeholder='Last Name' name="lastName" value={checkoutState.lastName} onChange={handleInputChange}></Input>
-                </Grid.items>
                 <Grid.items className='lg:col-span-2'>
                   <Input type='text' placeholder='Find Delivery Addres*' name="address" value={checkoutState.address} onChange={handleInputChange}></Input>
                 </Grid.items>
-                <Grid.items>
+                <Grid.items >
                   <Input type='text' placeholder='Phone Number' name="phoneNumber" value={checkoutState.phoneNumber} onChange={handleInputChange}></Input>
                 </Grid.items>
               </Grid>
             </div>
 
-            <div className='mt-4'>
+            <div className="">
+        <div className="w-full mt-5 p-5 rounded-t-lg border border-black flex items-center justify-between">
+          <h1 className="text-lg">Payments By Xendit</h1>
+          <div className="flex items-center gap-3">
+            <img
+              src={payment1}
+              alt=""
+              width={900}
+              height={900}
+              className="w-[40px]"
+            />
+            <img
+              src={payment2}
+              alt=""
+              width={900}
+              height={900}
+              className="w-[40px]"
+            />
+            <img
+              src={payment3}
+              alt=""
+              width={900}
+              height={900}
+              className="w-[40px]"
+            />
+            <img
+              src={payment4}
+              alt=""
+              width={900}
+              height={900}
+              className="w-[40px]"
+            />
+          </div>
+        </div>
+      <div className="flex flex-col items-center bg-white-three py-9">
+        <MdOutlinePayment className='text-[15rem]' />
+        <p className="max-w-[420px] text-center text-lg">After clicking “Pay now”, you will be redirected to Payments By Xendit to complete your purchase securely.</p>
+      </div>
+    </div>
+
+            {/* <div className='mt-4'>
               <h1 className='mb-4 text-3xl font-semibold'>Payment Details</h1>
               <Grid columnsAmount={1} className='lg:grid-cols-2 mt-4'>
                 <Grid.items className='lg:col-span-2'>
@@ -217,16 +249,10 @@ const CheckoutPage = () => {
                   <Input type='text' placeholder='cvv' maxLength={3} name="cvv" value={checkoutState.cvv} onChange={handleInputChange}></Input>
                 </Grid.items>
               </Grid>
-            </div>
+            </div> */}
 
-            <div className='flex flex-col gap-4 mt-4'>
-              <CheckBox label='My billing and delivery information are the same ' />
-              <CheckBox label={`I’m 13+ year old`} />
-              <div className='flex flex-col gap-2'>
-                <h1>Also want product updates with our newsletter?</h1>
-                <CheckBox label={`Yes, I’d like to receive emails about exclusive sales and more.`} />
-              </div>
-              <Button className='bg-[#232321] lg:w-[400px] py-3 mt-4 disabled:text-gray-500' type='submit' disabled={!checkAttributes()}>Pay</Button>
+            <div className='flex flex-col w-full gap-4 mt-4'>
+              <Button className='bg-[#232321] py-3 mt-4 disabled:text-gray-500 w-full' type='submit' disabled={!checkAttributes()}>Pay</Button>
             </div>
             </form>
           </Grid.items>
@@ -240,12 +266,8 @@ const CheckoutPage = () => {
                     <p>{getTotalPriceItem()}</p>
                   </div>
                   <div className='flex justify-between'>
-                    <p>Delivery</p>
-                    <p>{ConvertRupiah(35000)}</p>
-                  </div>
-                  <div className='flex justify-between'>
-                    <p>Sales Tax</p>
-                    <p>-</p>
+                    <p>Sales Tax (5%)</p>
+                    <p>{taxes()}</p>
                   </div>
                   {status?.toUpperCase() === "KICKS MEMBER" ? 
                      <div className='flex justify-between'>

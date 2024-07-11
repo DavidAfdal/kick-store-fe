@@ -5,6 +5,7 @@ export type OrderType = {
     total_price: number;
     total_items: number;
     order_items: OrderItemModel[];
+    payment: Payment;
     address: string;
     phone_number: string;
     user_id: number;
@@ -20,6 +21,14 @@ export type PaginationHistory = {
 };
 
 
+export type DashboardData = {
+  totalStock: number,
+  revanueMonth: number,
+  salesMonth: number
+
+}
+
+
 export type OrderItemModel = {
     id: number;
     shoe_color: string;
@@ -32,6 +41,16 @@ export type OrderItemModel = {
     createdAt: string;
     updatedAt: string;
   };
+
+export type Payment = {
+  id: number;
+  grossAmount: number;
+  paymentStatus: string;
+  paymentUrl: string;
+  order_id: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 //   "id": "Ddxv5BmaKD2EJbciSoISd",

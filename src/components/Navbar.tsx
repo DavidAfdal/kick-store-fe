@@ -18,7 +18,7 @@ const Navbar = () => {
     });
     return total;
   };
-  const { isLoggedIn, logout } = React.useContext(AuthContext) as AuthContextType;
+  const { isLoggedIn, logout, role } = React.useContext(AuthContext) as AuthContextType;
   return (
     <header className='max-w-[1440px] mx-auto py-4 px-8 bg-white min-h-[100px] mt-8 rounded-2xl flex items-center justify-between'>
       <nav className='hidden md:block'>
@@ -36,7 +36,9 @@ const Navbar = () => {
         </ul>
       </nav>
       <img src={Logo} alt='kicks' onClick={() => navigate('/')} className='cursor-pointer w-[90px] h-[20px]' />
-      {isLoggedIn ? (
+      {isLoggedIn ? 
+      (role === "USER" ?
+      (
         <div className='flex gap-4 items-center'>
           <div className='relative cursor-pointer'>
             <AiOutlineShoppingCart className='text-2xl' onClick={() => navigate('/cart')} />
@@ -58,6 +60,9 @@ const Navbar = () => {
             </p>
           </Dropdown>
         </div>
+      ): <button className='bg-[#4A69E2] py-2 px-4 text-white rounded-md' onClick={() => navigate('/admin/dashboard')}>
+        Dashboard 
+      </button>
       ) : (
         <div className='flex gap-4 items-center'>
           <Button onClick={() => navigate('/register')}>Sign Up</Button>

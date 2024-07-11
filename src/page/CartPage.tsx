@@ -52,13 +52,23 @@ const CartPage = () => {
     return ConvertRupiah(total + 0);
   };
 
+  const Taxex = () => {
+    let total = 0;
+    if (cart.length > 0) {
+      cart.forEach((item) => {
+        total += item.quantity * item.price;
+      });
+    }
+   return ConvertRupiah(total * 0.05);
+  };
+
   const getTotalPrice = () => {
     let total = 0;
     cart.forEach((item) => {
       total += item.quantity * item.price;
     });
 
-    const hargaAkhir = profile.status.toUpperCase() === "KICKS MEMBER" ? (total+35000)-((total+35000* 15) / 100) : total + 35000
+    const hargaAkhir = profile.status.toUpperCase() === "KICKS MEMBER" ? (total+(total*0.05))-(((total+(total*0.05))* 15) / 100) : total + (total * 0.05)
     
 
     return ConvertRupiah(hargaAkhir);
@@ -264,12 +274,8 @@ const CartPage = () => {
                       <p>{cart.length <= 0 ? `Rp 0`:`${getTotalPriceItem()}` }</p>
                     </div>
                     <div className='flex justify-between'>
-                      <p>Delivery</p>
-                      <p>{cart.length <= 0 ? `Rp 0` : `${ConvertRupiah(35000)}`}</p>
-                    </div>
-                    <div className='flex justify-between'>
-                      <p>Sales Tax</p>
-                      <p>-</p>
+                      <p>Sales Tax (5%)</p>
+                      <p>{cart.length <= 0 ? `Rp 0` : `${Taxex()}`}</p>
                     </div>
                     {profile.status.toUpperCase() === "KICKS MEMBER" ? 
                      <div className='flex justify-between'>

@@ -27,9 +27,7 @@ const HistoryPage = () => {
             Authorization:  `Bearer ${token}`
           }
         })
-        console.log(response)
         setHistoryOrder(response.data)
-        console.log(response.data)
       } catch (error) {
         console.log(error);
       }
@@ -55,7 +53,7 @@ const HistoryPage = () => {
           </div>
         ) :  
 
-          <table className="border-collapse border table-auto mt-[20px]">
+          <table className="border-collapse border table-auto mt-[20px] w-full">
   <thead className="bg-[#4A69E2] text-white">
     <tr>
       
@@ -63,9 +61,7 @@ const HistoryPage = () => {
       <th className='px-6 py-3'>Order Date</th>
       <th className='px-6 py-3'>Items</th>
       <th className='px-6 py-3'>Total</th>
-      <th className='px-6 py-3'>Order Status</th>
-      <th className='px-6 py-4'>Payment</th>
-      <th className='px-6 py-4'>Delivery Date</th>
+      <th className='px-6 py-3'>Status</th>
       <th className='px-6 py-4'></th>
     </tr>
   </thead>
@@ -76,9 +72,7 @@ const HistoryPage = () => {
             <td className='px-6 py-3 text-center'>{FormatDateToDDMMYYYY(new Date(data.createdAt))}</td>
             <td className='px-6 py-3 text-center'>{data.total_items}</td>
             <td className='px-6 py-3 text-center'>{ConvertRupiah(data.total_price)}</td>
-            <td className='px-6 py-3 text-center'>Packed</td>
-            <td className='px-6 py-4 text-center'><p>Credit Card</p></td>
-            <td className='px-6 py-4 text-center'>{DeliverdDay(new Date(data.createdAt))}</td>
+            <td className='px-6 py-3 text-center'>{data.payment.paymentStatus}</td>
             <td className = 'px-6 py-4 text-center'><Link to="/history">View Details</Link></td>
           </tr>
            ))}

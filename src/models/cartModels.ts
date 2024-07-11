@@ -20,7 +20,6 @@ export type ShoeCart = {
 
 export type CartInput = {
   shoeId: number;
-  cart_color: string;
   cart_size: string;
   price: number
 }

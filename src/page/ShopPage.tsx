@@ -249,10 +249,7 @@ const ShopPage = () => {
                         <Card.Title>{data.name}</Card.Title>
                         <Card.Button onClick={() => navigate(`/details/${data.id}`)}>
                           {' '}
-                          View Product{' '}
-                          <span className='text-[#FFA52F] hidden sm:block'>
-                            &nbsp; <span className='text-white'>-</span> &nbsp; {ConvertRupiah(data.price)}
-                          </span>
+                          View Product - <span className='text-[#FFA52F]'>&nbsp;{data.diskon ? ConvertRupiah(data.price - (data.price*data.diskon/100)) : ConvertRupiah(data.price)}</span>
                         </Card.Button>
                       </Card>
                     ))}

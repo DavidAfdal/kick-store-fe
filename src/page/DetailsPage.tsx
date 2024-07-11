@@ -29,10 +29,9 @@ const DetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { isLoggedIn, login, token } = React.useContext(AuthContext) as AuthContextType;
+  const { isLoggedIn, login, token, role } = React.useContext(AuthContext) as AuthContextType;
   const {isLoading, error} = useSelector((state: RootState) => state.cartReducer)
   const [size, setSize] = React.useState(0);
-  const [selectedColor, setSelectedColor] = React.useState<string | null>('');
   const [authModal, setAuthModal] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [productDetails, setProductDetails] = React.useState<ProductDetails | null>(null);
@@ -55,15 +54,27 @@ const DetailsPage = () => {
     return price - price * (diskon / 100);
   };
 
-  const handleChangeRadioBtn = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedColor(event.target.value);
-  };
+
 
   const handleClickAddToCart = () => {
     if (isLoggedIn && token) {
+
+      if(role === "ADMIN") {
+        toast.warning("Admin can't access this section",  {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
+        return;
+      }
+
         const data: CartInput = {
           shoeId: parseInt(id as string),
-          cart_color: selectedColor === '' ? productDetails?.colors[0].name as string : selectedColor as string,
           cart_size: size === 0 ? productDetails?.sizes[0].size.toString() as string : size.toString(),
           price: productDetails?.diskon ? priceAfterDiscount(productDetails.diskon, productDetails.price) : productDetails?.price as number
         };
@@ -103,6 +114,20 @@ const DetailsPage = () => {
 
   const handleLike = () => {
     if (isLoggedIn) {
+      console.log(role)
+      if(role === "ADMIN") {
+        toast.warning("Admin can't access this section",  {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
+        return;
+      }
       if (likeItem) {
         dispatch(toggleLike(productDetails?.id));
         dispatch(removeItem(productDetails?.id));
@@ -149,10 +174,22 @@ const DetailsPage = () => {
 
   const handleBuyNow = () => {
     if (isLoggedIn) {
+      if(role === "ADMIN") {
+        toast.warning("Admin can't access this section",  {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
+        return;
+      }
       if (productDetails) {
         const data: CartInput = {
           shoeId: parseInt(id as string),
-          cart_color: selectedColor === '' ? productDetails?.colors[0].name as string : selectedColor as string,
           cart_size: size === 0 ? productDetails?.sizes[0].size.toString() as string : size.toString(),
           price: productDetails?.diskon ? priceAfterDiscount(productDetails.diskon, productDetails.price) : productDetails?.price as number
         };
@@ -303,14 +340,6 @@ const DetailsPage = () => {
               <Grid columnsAmount={7} className='sm:grid-cols-8'>
               {Array.from({length: 5}).map((_,i) => (
                   <Grid.items key={i} className='aspect-square'>
-                    <Skeleton className='w-full h-full rounded-full' /> 
-                  </Grid.items>
-              )) }
-              </Grid>
-              <Skeleton className='w-[100px] h-[40px]'/> 
-              <Grid columnsAmount={7} className='sm:grid-cols-8'>
-              {Array.from({length: 5}).map((_,i) => (
-                  <Grid.items key={i} className='aspect-square'>
                     <Skeleton className='w-full h-full rounded-md' /> 
                   </Grid.items>
               )) }
@@ -340,21 +369,7 @@ const DetailsPage = () => {
               </div>
 
               {/* colorshoes-selection */}
-              <h1 className='font-semibold'>COLOR</h1>
-              <Grid columnsAmount={7} className='sm:grid-cols-8'>
-                {productDetails?.colors.map((value, i) => (
-                  <Grid.items key={i}>
-                    <label className='color'>
-                      <input type='radio' name='cp' className='hidden color-picker peer' value={value.name} onChange={handleChangeRadioBtn} defaultChecked={i === 0} />
-                      <div className='circle-button  '>
-                        <div className='border-picker peer-checked:border peer-checked:border-[#4A69E2]'>
-                          <span style={{ backgroundColor: value.color }}></span>
-                        </div>
-                      </div>
-                    </label>
-                  </Grid.items>
-                ))}
-              </Grid>
+              {/* <h1 className='font-semibold'>COLOR</h1> */}
               {/* sizeshoes-selection */}
               <h1 className='font-semibold'>SIZE</h1>
               <Grid columnsAmount={5} className='sm:grid-cols-8'>
@@ -391,7 +406,6 @@ const DetailsPage = () => {
 
               {/* Deskripsi-product-section */}
               <p className='font-semibold'>ABOUT THE PRODUCT</p>
-              <p className='capitalize'>{productDetails?.colors.map(col => col.name).join(" / ")}</p>
               <p className='text-justify'>{productDetails?.description}</p>
 
               </>
