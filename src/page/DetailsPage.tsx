@@ -29,7 +29,7 @@ const DetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { isLoggedIn, login, token, role } = React.useContext(AuthContext) as AuthContextType;
+  const { isLoggedIn, login, token, role, setRole } = React.useContext(AuthContext) as AuthContextType;
   const {isLoading, error} = useSelector((state: RootState) => state.cartReducer)
   const [size, setSize] = React.useState(0);
   const [authModal, setAuthModal] = React.useState<boolean>(false);
@@ -208,7 +208,8 @@ const DetailsPage = () => {
     e.preventDefault()
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, loginState)
-      login(response.data.data);
+      login(response.data.data.token);
+      setRole(response.data.data.role);
       setLoginState({
         email: "",
         password: "",
@@ -244,8 +245,8 @@ const DetailsPage = () => {
     onSuccess: async (result) => {
       console.log(result)
       const respon = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
-      login(respon.data.data);
-      // navigate("/")
+      login(respon.data.data.token);
+      setRole(respon.data.data.role);
       console.log(respon.data.data)
       setAuthModal(false)
     }

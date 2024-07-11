@@ -14,7 +14,7 @@ import { HttpError } from '../models/errorModel';
 import { ToastContainer, toast } from 'react-toastify';
 
 const RegisterPage = () => {
-  const { login } = React.useContext(AuthContext) as AuthContextType;
+  const { login,setRole } = React.useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
   const [dataRegister, setDataRegister] = React.useState({
     firstName: '',
@@ -35,8 +35,9 @@ const RegisterPage = () => {
     flow: 'auth-code',
     onSuccess: async (result) => {
       console.log(result)
-      const data = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
-      login(data.data.id);
+      const respon = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/loginGoogle`, {code: result.code})
+      login(respon.data.data.token);
+      setRole(respon.data.data.role);
       navigate("/")
     }
   });
