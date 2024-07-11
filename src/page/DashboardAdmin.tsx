@@ -114,18 +114,20 @@ React.useEffect(() => {
       </tr>
           </thead>
             <tbody>
-          
-            
-                {historyOrder?.data.map((data) => (
-                      <tr key={data.id} className='bg-white'>
-                      <td className='px-6 py-3 text-center'>{data.id}</td>
-                      <td className='px-6 py-3 text-center'>{FormatDateToDDMMYYYY(new Date(data.createdAt))}</td>
-                      <td className='px-6 py-3 text-center'>{data.total_items}</td>
-                      <td className='px-6 py-3 text-center'>{ConvertRupiah(data.total_price)}</td>
-                      <td className='px-6 py-3 text-center'>{data.payment.paymentStatus}</td>
-                      <td className = 'px-6 py-4 text-center'><Link to="/history">View Details</Link></td>
-                    </tr>
-                ))}
+             
+                {historyOrder ?
+                  historyOrder?.data.map((data) => (
+                    <tr key={data.id} className='bg-white'>
+                    <td className='px-6 py-3 text-center'>{data.id}</td>
+                    <td className='px-6 py-3 text-center'>{FormatDateToDDMMYYYY(new Date(data.createdAt))}</td>
+                    <td className='px-6 py-3 text-center'>{data.total_items}</td>
+                    <td className='px-6 py-3 text-center'>{ConvertRupiah(data.total_price)}</td>
+                    <td className='px-6 py-3 text-center'>{data.payment.paymentStatus}</td>
+                    <td className = 'px-6 py-4 text-center'><Link to="/history">View Details</Link></td>
+                  </tr>
+              )) :null
+              }
+                
                     
          
                     
