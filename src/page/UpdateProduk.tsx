@@ -31,6 +31,7 @@ const UpdateProdukPage: React.FC = () => {
   const [sizes, setSizes] = useState<SizeQuantity[]>([]);
   const [currentSize, setCurrentSize] = useState('');
   const [currentQuantity, setCurrentQuantity] = useState('');
+  const [reload, setReload] = useState(false);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -84,12 +85,32 @@ const UpdateProdukPage: React.FC = () => {
 
   const handleAddSize = async() => { {
 
+
     if (currentSize && currentQuantity) {
+
+    if (sizes.some(obj => parseInt(obj.size) === parseInt(currentSize))) {
+
+      toast.error('Size already exists!'), {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      };
+      
+      return;
+    }
+
       try {
         const resp = await axios.post(`http://localhost:5000/api/shoe/addSize/${id}`, {
            size: currentSize,
            stock: currentQuantity
         })
+
+        console.log(resp)
 
 
         toast.success('Added size successfully!'), {
@@ -103,7 +124,7 @@ const UpdateProdukPage: React.FC = () => {
           theme: 'light',
         };
 
-      setSizes([...sizes, { id: uuidv4(), size: currentSize, stock: currentQuantity }]);
+      setSizes([...sizes, { id: resp.data.data.id, size: currentSize, stock: currentQuantity }]);
       setCurrentSize('');
       setCurrentQuantity('');
         
@@ -126,13 +147,50 @@ const UpdateProdukPage: React.FC = () => {
 }
   
 
-  const handleRemoveSize = (id: string) => {
+  const handleRemoveSize = async (id: string) => {
+    console.log(id)
+    try {
+      const resp = await axios.delete(`http://localhost:5000/api/shoe/deleteSize/${id}`)
+
+      console.log(resp)
+
+
+      toast.success('Delete size successfully!'), {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      };
+
     setSizes(sizes.filter(size => size.id !== id));
+
+      
+
+    } catch (error) {
+
+      toast.error('Adding size failed'), {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      };
+    }
+    // setSizes(sizes.filter(size => size.id !== id));
   };
 
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+
 
     const formData = new FormData();
     formData.append('name', productName);
@@ -141,18 +199,22 @@ const UpdateProdukPage: React.FC = () => {
     formData.append('discount', discount);
     formData.append('category', category);
     formData.append('type', gender);
-    formData.append('sizes', JSON.stringify(sizes));
+
     
     if (thumbnail) {
       formData.append('thumbnail', thumbnail);
     }
+
+    if (images) {
+      images.forEach((image) => {
+        formData.append(`images`, image, image.name);
+      });
+    }
     
-    images.forEach((image) => {
-      formData.append(`images`, image, image.name);
-    });
+   
 
     try {
-      await axios.post('http://localhost:5000/api/shoe', formData, {
+      await axios.patch(`http://localhost:5000/api/shoe/update/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -169,9 +231,7 @@ const UpdateProdukPage: React.FC = () => {
       };
 
 
-      setTimeout(() => {
-        navigate('/admin/products');
-      }, 2000)
+       setReload(true)
       // Optionally, clear form fields or perform other actions upon successful submission
     } catch (error: any) {
       toast.error(error.message as string), {
@@ -191,34 +251,41 @@ const UpdateProdukPage: React.FC = () => {
 
   useEffect(() => {
       const getDetails = async () => {
-        const response =  await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/${id}`)
-        setProductName(response.data.data.name)
-        setDescription(response.data.data.description)
-        setPrice(response.data.data.price)
-        setDiscount(response.data.data.diskon)
-        setCategory(response.data.data.category)
-        setGender(response.data.data.type)
-        setSizes(response.data.data.sizes)
-        setThumbnailPreview(
-          { id: uuidv4(), url: `${response.data.data.images[0].url}` })
-        setImagePreviews(
-          [
-            {
-            id: uuidv4(),
-            url: `${response.data.data.images[1].url}`
-          },
-            {
-            id: uuidv4(),
-            url: `${response.data.data.images[2].url}`
-          },
-            {
-            id: uuidv4(),
-            url: `${response.data.data.images[3].url}`
-          },
-        
-        ]
-        )
-        console.log(response.data.data.images)
+        try {
+          const response =  await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/${id}`)
+          setProductName(response.data.data.name)
+          setDescription(response.data.data.description)
+          setPrice(response.data.data.price)
+          setDiscount(response.data.data.diskon)
+          setCategory(response.data.data.category)
+          setGender(response.data.data.type)
+          setSizes(response.data.data.sizes)
+          setThumbnailPreview(
+            { id: uuidv4(), url: `${response.data.data.images[0].url}` })
+          setImagePreviews(
+            [
+              {
+              id: uuidv4(),
+              url: `${response.data.data.images[1].url}`
+            },
+              {
+              id: uuidv4(),
+              url: `${response.data.data.images[2].url}`
+            },
+              {
+              id: uuidv4(),
+              url: `${response.data.data.images[3].url}`
+            },
+          
+          ]
+          )
+          setReload(false)
+        } catch (error) {
+          console.log(error)
+          setReload(false)
+        }
+       
+      
       }
 
       getDetails()
