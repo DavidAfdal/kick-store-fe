@@ -47,25 +47,7 @@ const DetailTransaksi = () =>{
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {
-                        orderDetails?.order_items.map((item) => (
-                            <tr key={item.id}>
-                            <td className='flex items-center gap-3'>
-                                <img src={item.shoe.thumbImg} alt="" className='w-[120px]' />
-                                <div className="">
-                                    <p>{item.shoe.name}</p>    
-                                    <p>{ConvertRupiah(item.price)}</p>    
-                                </div>    
-                            </td>
-                            <td className='text-center'>
-                                <p>{item.quantity}</p>
-                            </td>
-                            <td className='text-center'>
-                                <p>{ConvertRupiah(item.quantity* item.price)}</p>
-                            </td>
-                        </tr> 
-                        ))
-                    } */}
+                  
                  
                     <tr>
                         <td className='flex items-center gap-3'>
