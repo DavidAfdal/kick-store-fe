@@ -1,5 +1,5 @@
-// import { useEffect, useState } from 'react';
-import sepatu from '../assets/image/boost3.png';
+
+import sepatu from '../assets/Image/shoe1.jpg';
 // import { OrderType } from '../models/orderModel';
 // import axios from 'axios';
 // import { useParams } from 'react-router-dom';
