@@ -3,7 +3,7 @@ import Grid from './Grid';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/Image/Logo.png';
 import { IoPersonOutline, IoDocumentTextOutline } from 'react-icons/io5';
-import { MdHome, MdOutlineAddShoppingCart, MdOutlineHome } from "react-icons/md";
+import {  MdOutlineAddShoppingCart, MdOutlineHome } from "react-icons/md";
 import { FaSignOutAlt } from 'react-icons/fa';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 

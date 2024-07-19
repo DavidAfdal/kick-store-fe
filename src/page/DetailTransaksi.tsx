@@ -1,28 +1,28 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import sepatu from '../assets/image/boost3.png';
-import { OrderType } from '../models/orderModel';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { ConvertRupiah } from '../utils/formater';
+// import { OrderType } from '../models/orderModel';
+// import axios from 'axios';
+// import { useParams } from 'react-router-dom';
+
 
 
 const DetailTransaksi = () =>{
-    const {orderId} = useParams()
-    const [orderDetails, setOrderDetails] = useState<OrderType | null>(null)
+    // const {orderId} = useParams()
+    // const [orderDetails, setOrderDetails] = useState<OrderType | null>(null)
 
 
-    useEffect(() => {
-        const getOrderDetails = async () => {
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/order/orders/${orderId}`)
-                console.log(response)
-                setOrderDetails(response.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getOrderDetails()
-    }, [orderId])
+    // useEffect(() => {
+    //     const getOrderDetails = async () => {
+    //         try {
+    //             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/order/orders/${orderId}`)
+    //             console.log(response)
+    //             setOrderDetails(response.data)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getOrderDetails()
+    // }, [orderId])
 
 
 

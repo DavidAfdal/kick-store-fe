@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,7 +16,6 @@ interface SizeQuantity {
 }
 
 const UpdateProdukPage: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
@@ -31,7 +30,7 @@ const UpdateProdukPage: React.FC = () => {
   const [sizes, setSizes] = useState<SizeQuantity[]>([]);
   const [currentSize, setCurrentSize] = useState('');
   const [currentQuantity, setCurrentQuantity] = useState('');
-  const [reload, setReload] = useState(false);
+
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -231,7 +230,7 @@ const UpdateProdukPage: React.FC = () => {
       };
 
 
-       setReload(true)
+       
       // Optionally, clear form fields or perform other actions upon successful submission
     } catch (error: any) {
       toast.error(error.message as string), {
@@ -279,10 +278,10 @@ const UpdateProdukPage: React.FC = () => {
           
           ]
           )
-          setReload(false)
+  
         } catch (error) {
           console.log(error)
-          setReload(false)
+
         }
        
       

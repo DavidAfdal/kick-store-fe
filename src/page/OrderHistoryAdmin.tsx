@@ -1,11 +1,9 @@
 
 import React from 'react';
-import Box from '../assets/Image/box.png';
-import Button from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { PaginationHistory } from '../models/orderModel';
-import { ConvertRupiah, DeliverdDay, FormatDateToDDMMYYYY } from '../utils/formater';
+import { ConvertRupiah, FormatDateToDDMMYYYY } from '../utils/formater';
 import ReactPaginate from 'react-paginate';
 
 const OrderHistoryAdmin = () =>  {

@@ -31,7 +31,6 @@ const DashboardAdmin = React.lazy(() => import('./components/DasboardAdmin.tsx')
 const DashboardAdminPage = React.lazy(() => import('./page/DashboardAdmin.tsx'))
 const ProdukPage = React.lazy(() => import('./page/ProdukPage'))
 const UpdateProduk = React.lazy(() => import('./page/UpdateProduk.tsx'))
-const AdminHistoryPage = React.lazy(() => import('./page/OrderHistoryAdmin.tsx'))
 const DetailTransaksi = React.lazy(() => import('./page/DetailTransaksi.tsx'))
 
 

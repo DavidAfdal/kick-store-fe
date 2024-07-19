@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../context/auth-context';
 import axios from 'axios';
 import { PaginationHistory } from '../models/orderModel';
-import { ConvertRupiah, DeliverdDay, FormatDateToDDMMYYYY } from '../utils/formater';
+import { ConvertRupiah, FormatDateToDDMMYYYY } from '../utils/formater';
 import ReactPaginate from 'react-paginate';
 
 const HistoryPage = () => {

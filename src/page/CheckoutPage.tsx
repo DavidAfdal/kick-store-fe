@@ -1,5 +1,4 @@
 import React from 'react';
-import CheckBox from '../components/CheckBox';
 import Container from '../components/Container';
 import Grid from '../components/Grid';
 import Input from '../components/Input';
