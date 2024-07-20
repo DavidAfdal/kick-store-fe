@@ -189,7 +189,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <Container>
+      {/* <Container>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold'>REVIEWS</h1>
           <Link to="/reviews">
@@ -209,7 +209,7 @@ const HomePage = () => {
             </Grid.items>
           ))}
         </Grid>
-      </Container>
+      </Container> */}
 {/* 
       <Modal open={modalI} onClose={() => setModalI(false)}>
         <div className='w-[280px] lg:w-[450px] md:p-4 flex flex-col gap-4'>
