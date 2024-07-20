@@ -149,7 +149,7 @@ const UpdateProdukPage: React.FC = () => {
   const handleRemoveSize = async (id: string) => {
     console.log(id)
     try {
-      const resp = await axios.delete(`http://localhost:5000/api/shoe/deleteSize/${id}`)
+      const resp = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/deleteSize/${id}`)
 
       console.log(resp)
 
@@ -213,7 +213,7 @@ const UpdateProdukPage: React.FC = () => {
    
 
     try {
-      await axios.patch(`http://localhost:5000/api/shoe/update/${id}`, formData, {
+      await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/update/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
