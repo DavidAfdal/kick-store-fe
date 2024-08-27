@@ -121,11 +121,12 @@ const ProdukPage: React.FC = () => {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shoe`, formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/create`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+
 
     
 
