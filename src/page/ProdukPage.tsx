@@ -160,6 +160,9 @@ const ProdukPage: React.FC = () => {
         progress: undefined,
         theme: 'light',
       };
+
+      setIsLoading(false)
+
       // Handle error states
     }
   };
