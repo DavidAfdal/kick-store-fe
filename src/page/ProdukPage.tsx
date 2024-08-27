@@ -17,6 +17,7 @@ interface SizeQuantity {
 
 const ProdukPage: React.FC = () => {
   const navigate = useNavigate();
+  const [isLoding, setIsLoading] = useState(false);
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('0');
@@ -96,6 +97,8 @@ const ProdukPage: React.FC = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append('name', productName);
@@ -123,6 +126,10 @@ const ProdukPage: React.FC = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
+
+    
+
+
       toast.success('Product added successfully!'), {
         position: 'top-center',
         autoClose: 2000,
@@ -133,6 +140,9 @@ const ProdukPage: React.FC = () => {
         progress: undefined,
         theme: 'light',
       };
+
+      setIsLoading(false)
+
 
 
       setTimeout(() => {
