@@ -97,7 +97,7 @@ const ProdukPage: React.FC = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     setIsLoading(true);
 
     const formData = new FormData();
@@ -275,7 +275,7 @@ const ProdukPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <button type="submit" className="bg-[#4C3BCF] text-white py-2 px-4 rounded-lg w-full ">Submit</button>
+        <button type="submit" className="bg-[#4C3BCF] text-white py-2 px-4 rounded-lg w-full " disabled={isLoding}>Submit</button>
       </form>
       <ToastContainer position='top-center' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
     </div>
