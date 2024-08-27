@@ -118,7 +118,7 @@ const ProdukPage: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/shoe', formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shoe`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

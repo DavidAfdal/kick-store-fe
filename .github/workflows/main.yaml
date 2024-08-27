@@ -1,8 +1,7 @@
-name: CI
+name: CI/CD
 on:
   push:
     branches: ["master"]
-
 jobs:
   build:
     environment: stagging
@@ -27,7 +26,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/kicks-store-fe:latest
-
   deployment:
     needs: build
     environment: stagging

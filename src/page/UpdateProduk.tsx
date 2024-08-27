@@ -104,7 +104,7 @@ const UpdateProdukPage: React.FC = () => {
     }
 
       try {
-        const resp = await axios.post(`http://localhost:5000/api/shoe/addSize/${id}`, {
+        const resp = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/addSize/${id}`, {
            size: currentSize,
            stock: currentQuantity
         })
@@ -182,7 +182,7 @@ const UpdateProdukPage: React.FC = () => {
         theme: 'light',
       };
     }
-    // setSizes(sizes.filter(size => size.id !== id));
+
   };
 
 
