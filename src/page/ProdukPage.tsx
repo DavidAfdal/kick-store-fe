@@ -121,7 +121,7 @@ const ProdukPage: React.FC = () => {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shoe/create`, formData, {
+      await axios.post(`https://api.kicksstore.site/api/shoe/create`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -279,7 +279,7 @@ const ProdukPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <button type="submit" className="bg-[#4C3BCF] text-white py-2 px-4 rounded-lg w-full " disabled={isLoding}>Submit</button>
+        <button type="submit" className="bg-[#4C3BCF] text-white py-2 px-4 rounded-lg w-full " disabled={isLoding}> {isLoding ? "Loading" : "Submit"}</button>
       </form>
       <ToastContainer position='top-center' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
     </div>
