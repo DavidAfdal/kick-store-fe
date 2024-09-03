@@ -47,7 +47,7 @@ const Footer = () => {
                 <li className='cursor-pointer hover:text-[#FFA52F]'>Hiking</li>
               </ul>
             </Grid.items>
-            <Grid.items>
+            {/* <Grid.items>
               <h1 className='text-2xl md:text-3xl  text-[#FFA52F] font-semibold mb-4'>Follow Us</h1>
 
               <div className='flex gap-x-6'>
@@ -56,7 +56,7 @@ const Footer = () => {
                 <BsTwitter className='w-[32px] h-[32px] text-white cursor-pointer hover:text-[#FFA52F]' />
                 <BsInstagram className='w-[32px] h-[32px] text-white cursor-pointer hover:text-[#FFA52F]' />
               </div>
-            </Grid.items>
+            </Grid.items> */}
           </Grid>
         </div>
       </Container>
